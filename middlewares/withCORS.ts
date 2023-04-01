@@ -1,21 +1,15 @@
 import { ApiMiddleware } from '@/Type'
 
-const withCORS: ApiMiddleware = handler => async (req, res) => {
+const withCORS: ApiMiddleware = (handler) => async (req, res) => {
     res.setHeader('Access-Control-Allow-Credentials', 'true')
 
     if (req.headers.origin === 'http://localhost:3000') {
         res.setHeader('Access-Control-Allow-Origin', '*')
     } else {
-        res.setHeader(
-            'Access-Control-Allow-Origin',
-            process.env.ALLOWED_ORIGIN as string
-        )
+        res.setHeader('Access-Control-Allow-Origin', process.env.CORS_ALLOWED_ORIGINS as string)
     }
 
-    res.setHeader(
-        'Access-Control-Allow-Methods',
-        'GET,OPTIONS,PATCH,DELETE,POST,PUT'
-    )
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT')
 
     res.setHeader(
         'Access-Control-Allow-Headers',
