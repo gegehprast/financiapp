@@ -7,7 +7,7 @@ export default function Home() {
     const { auth } = useAuth()
 
     return (
-        <main>
+        <main className="p-4">
             {/* total balance */}
             <section>
                 <h1 className="text-3xl font-semibold">Rp187,844,999</h1>

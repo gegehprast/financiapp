@@ -31,7 +31,7 @@ const MainLayout = ({ children }: Props) => {
         <div className="relative w-full h-screen mx-auto overflow-hidden bg-gray-200 lg:w-1/2 xl:w-1/4">
             {/* content */}
             <div className="relative w-full h-screen pb-[3rem] overflow-hidden">
-                <div className="w-full h-full p-4 overflow-y-auto" ref={content}>
+                <div className="w-full h-full overflow-y-auto" ref={content}>
                     {children}
                 </div>
             </div>
