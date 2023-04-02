@@ -18,7 +18,7 @@ const Wallets = () => {
             </header>
 
             <ul className="mt-5 bg-white">
-                <li className="group hover:bg-gray-500">
+                <li className="group hover:bg-gray-400">
                     <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
                         <div className="flex flex-row items-center">
                             <div className="w-8 h-8 group-hover:text-white">
@@ -37,7 +37,7 @@ const Wallets = () => {
                     </Link>
                 </li>
 
-                <li className="group hover:bg-gray-500">
+                <li className="group hover:bg-gray-400">
                     <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
                         <div className="flex flex-row items-center">
                             <div className="w-8 h-8 group-hover:text-white">
@@ -56,7 +56,7 @@ const Wallets = () => {
                     </Link>
                 </li>
 
-                <li className="group hover:bg-gray-500">
+                <li className="group hover:bg-gray-400">
                     <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
                         <div className="flex flex-row items-center">
                             <div className="w-8 h-8 group-hover:text-white">
@@ -75,7 +75,7 @@ const Wallets = () => {
                     </Link>
                 </li>
 
-                <li className="group hover:bg-gray-500">
+                <li className="group hover:bg-gray-400">
                     <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
                         <div className="flex flex-row items-center">
                             <div className="w-8 h-8 group-hover:text-white">
