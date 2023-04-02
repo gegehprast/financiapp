@@ -4,6 +4,8 @@ import MainLayout from '../components/MainLayout'
 import { ReactElement } from 'react'
 import '../styles/globals.css'
 import Head from 'next/head'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 export type MyNextPage<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement<P>) => ReactElement
@@ -12,6 +14,8 @@ export type MyNextPage<P = {}, IP = P> = NextPage<P, IP> & {
 type ComponentProps = AppProps & {
     Component?: MyNextPage
 }
+
+const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }: ComponentProps) {
     const getLayout = Component.getLayout || ((page: ReactElement) => <MainLayout>{page}</MainLayout>)
@@ -33,7 +37,10 @@ export default function App({ Component, pageProps }: ComponentProps) {
                 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png"></link>
             </Head>
 
-            {getLayout(<Component {...pageProps} />)}
+            <QueryClientProvider client={queryClient}>
+                {getLayout(<Component {...pageProps} />)}
+                <ReactQueryDevtools initialIsOpen={false} />
+            </QueryClientProvider>
         </>
     )
 }

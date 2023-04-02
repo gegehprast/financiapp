@@ -1,3 +1,6 @@
+import useAuth from "@/hooks/useAuth"
+
 export default function Home() {
-    return <h1 className="text-3xl font-bold underline">Hello world!</h1>
+    const { auth } = useAuth()
+    return <h1 className="text-3xl font-bold underline">Hello, {auth?.user?.name}!</h1>
 }
