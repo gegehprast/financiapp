@@ -1,4 +1,4 @@
-import { ApiMiddleware } from '@/Type'
+import { ApiMiddleware } from '@/global'
 
 const PUT: ApiMiddleware = handler => async (req, res) => {
     if (req.method === 'PUT') {

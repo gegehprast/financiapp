@@ -1,5 +1,5 @@
 import database from '@/lib/database'
-import { ApiMiddleware } from '@/Type'
+import { ApiMiddleware } from '@/global'
 
 const withDB: ApiMiddleware = (handler) => async (req, res) => {
     await database()

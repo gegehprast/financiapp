@@ -1,4 +1,4 @@
-import { ApiMiddleware } from '@/Type'
+import { ApiMiddleware } from '@/global'
 
 const GET: ApiMiddleware = handler => async (req, res) => {
     if (req.method === 'GET') {

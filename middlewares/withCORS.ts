@@ -1,4 +1,4 @@
-import { ApiMiddleware } from '@/Type'
+import { ApiMiddleware } from '@/global'
 
 const withCORS: ApiMiddleware = (handler) => async (req, res) => {
     res.setHeader('Access-Control-Allow-Credentials', 'true')
