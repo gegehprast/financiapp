@@ -78,6 +78,6 @@ const Login: MyNextPage = () => {
     )
 }
 
-Login.getLayout = (page) => <AuthLayout>{page}</AuthLayout>
+Login.layout = (page) => <AuthLayout>{page}</AuthLayout>
 
 export default Login

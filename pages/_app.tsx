@@ -8,7 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 export type MyNextPage<P = {}, IP = P> = NextPage<P, IP> & {
-    getLayout?: (page: ReactElement<P>) => ReactElement
+    layout?: (page: ReactElement<P>) => ReactElement
 }
 
 type ComponentProps = AppProps & {
@@ -18,7 +18,7 @@ type ComponentProps = AppProps & {
 const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }: ComponentProps) {
-    const getLayout = Component.getLayout || ((page: ReactElement) => <MainLayout>{page}</MainLayout>)
+    const getLayout = Component.layout || ((page: ReactElement) => <MainLayout>{page}</MainLayout>)
 
     return (
         <>
