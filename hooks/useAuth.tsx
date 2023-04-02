@@ -5,11 +5,7 @@ import { Auth } from '@/global'
 import axios from 'axios'
 
 const getAuth = (): Promise<Auth> =>
-    axios.get('/api/auth').then((res) => {
-        console.log(res.data)
-
-        return res.data
-    })
+    axios.get('/api/auth').then((res) => res.data)
 
 export default function useAuth({ redirectTo = '', redirectIfFound = false } = {}) {
     const { data: auth, isLoading, isSuccess } = useQuery({ queryKey: ['auth'], queryFn: getAuth })
