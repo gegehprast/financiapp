@@ -1,14 +1,20 @@
-import ArrowPathRounded from '@/components/icons/ArrowPathRounded'
 import ArrowRightOnRectangle from '@/components/icons/ArrowRightOnRectangle'
 import ChevronRight from '@/components/icons/ChevronRight'
 import ReceiptPercent from '@/components/icons/ReceiptPercent'
 import RectangleGroup from '@/components/icons/RectangleGroup'
-import Tag from '@/components/icons/Tag'
 import Wallet from '@/components/icons/Wallet'
+import axios from 'axios'
 import Link from 'next/link'
+import Router from 'next/router'
 import React from 'react'
 
 const Account = () => {
+    const handleLogout = () => {
+        axios.post('/api/logout').then(() => {
+            Router.push('/login')
+        })
+    }
+
     return (
         <main>
             <ul className="mt-5 bg-white">
@@ -58,14 +64,14 @@ const Account = () => {
                 </li>
 
                 <li className="group hover:bg-gray-500">
-                    <Link href={'/logout'} className="flex flex-row items-center justify-between p-4">
+                    <button type="button" className="flex flex-row items-center justify-between p-4" onClick={handleLogout}>
                         <div className="flex flex-row items-center">
                             <div className="w-6 h-6">
                                 <ArrowRightOnRectangle />
                             </div>
                             <div className="ml-3 font-medium">Logout</div>
                         </div>
-                    </Link>
+                    </button>
                 </li>
             </ul>
         </main>
