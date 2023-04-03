@@ -1,4 +1,5 @@
 import React from 'react'
+import { IoRadioButtonOffOutline } from 'react-icons/io5'
 
 export const IconMap = {
     IoFastFoodOutline: React.lazy(() => import('react-icons/io5').then((module) => ({ default: module.IoFastFoodOutline }))),
@@ -22,6 +23,10 @@ export const IconMap = {
     IoCubeOutline: React.lazy(() => import('react-icons/io5').then((module) => ({ default: module.IoCubeOutline }))),
     IoLayersOutline: React.lazy(() => import('react-icons/io5').then((module) => ({ default: module.IoLayersOutline }))),
     TbGasStation: React.lazy(() => import('react-icons/tb').then((module) => ({ default: module.TbGasStation }))),
+    GrServices: React.lazy(() => import('react-icons/gr').then((module) => ({ default: module.GrServices }))),
+    IoServerOutline: React.lazy(() => import('react-icons/io5').then((module) => ({ default: module.IoServerOutline }))),
+    BsBoxes: React.lazy(() => import('react-icons/bs').then((module) => ({ default: module.BsBoxes }))),
+    IoCashOutline: React.lazy(() => import('react-icons/io5').then((module) => ({ default: module.IoCashOutline }))),
 }
 
 interface IconProps {
@@ -32,7 +37,11 @@ interface IconProps {
 const Icon: React.FC<IconProps> = ({ icon, className }) => {
     const IconComponent = IconMap[icon]
 
-    return <IconComponent className={className} />
+    return (
+        <React.Suspense fallback={<IoRadioButtonOffOutline />}>
+            <IconComponent className={className} />
+        </React.Suspense>
+    )
 }
 
 export default Icon
