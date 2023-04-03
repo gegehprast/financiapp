@@ -1,10 +1,12 @@
+import { IconMap } from '@/components/Icon'
 import mongoose, { Schema, Document } from 'mongoose'
 
 export interface ICategoryDoc extends Document {
     userId?: mongoose.Types.ObjectId
     categoryId?: mongoose.Types.ObjectId
     name: string
-    isIncome: boolean
+    type: 'expense' | 'income' | 'debt'
+    icon: keyof typeof IconMap
     createdAt: Date
     updatedAt: Date
 }
@@ -25,10 +27,16 @@ export const CategorySchema: Schema = new Schema(
             type: String,
             required: true,
         },
-        isIncome: {
-            type: Boolean,
+        type: {
+            type: Number,
             required: false,
-            default: false
+            default: 'expense',
+            enum: ['expense', 'income', 'debt'],
+        },
+        icon: {
+            type: String,
+            required: true,
+            enum: Object.keys(IconMap),
         },
     },
     { timestamps: true }
