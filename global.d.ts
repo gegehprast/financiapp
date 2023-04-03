@@ -9,11 +9,11 @@ export type ApiMiddleware = (handler: ApiHandler) => ApiHandler
 
 export interface Auth {
     isLoggedIn: boolean
-    user?: Partial<Omit<IUserDoc, 'password'>>
+    user: Partial<Omit<IUserDoc, 'password'>>
 }
 
 declare module 'iron-session' {
     interface IronSessionData {
-        auth?: Auth
+        auth: Auth
     }
 }
