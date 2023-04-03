@@ -18,5 +18,5 @@ async function authRoute(req: NextApiRequest, res: NextApiResponse<Auth>) {
         })
     }
 
-    return res.json({ isLoggedIn: false })
+    return res.json({ isLoggedIn: false, user: {} })
 }
