@@ -108,8 +108,8 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show, setShow }) => {
 
                     <div className="flex flex-row justify-around bg-gray-300 border border-green-400 rounded">
                         <label
-                            className={`flex flex-row items-center p-1 w-1/2 text-center rounded ${
-                                type === 'virtual' ? 'bg-white ' : 'text-gray-600 hover:text-black'
+                            className={`flex flex-row items-center p-1 w-1/2 text-center rounded text-gray-600 ${
+                                type === 'virtual' ? 'bg-white ' : ''
                             }`}
                         >
                             <input type="radio" value="virtual" checked={type === 'virtual'} onChange={(e) => setType(e.target.value)} />
@@ -117,8 +117,8 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show, setShow }) => {
                         </label>
 
                         <label
-                            className={`flex flex-row items-center p-1 w-1/2 text-center rounded ${
-                                type === 'cash' ? 'bg-white ' : 'text-gray-600 hover:text-black'
+                            className={`flex flex-row items-center p-1 w-1/2 text-center rounded text-gray-600 ${
+                                type === 'cash' ? 'bg-white ' : ''
                             }`}
                         >
                             <input type="radio" value="cash" checked={type === 'cash'} onChange={(e) => setType(e.target.value)} />
