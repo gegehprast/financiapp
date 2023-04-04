@@ -1,8 +1,9 @@
 import Icon from '@/components/Icon'
-import ArrowSmallLeft from '@/components/icons/ArrowSmallLeft'
 import useCategories from '@/hooks/useCategories'
 import Link from 'next/link'
+import Router from 'next/router'
 import React from 'react'
+import { IoArrowBackOutline } from 'react-icons/io5'
 
 const Categories = () => {
     const { categories, isLoading } = useCategories()
@@ -11,9 +12,9 @@ const Categories = () => {
     return (
         <main>
             <header className="flex flex-row items-center p-4 bg-white">
-                <Link href={'/account'} className="w-8 h-8">
-                    <ArrowSmallLeft />
-                </Link>
+                <button type="button" onClick={() => Router.back()}>
+                    <IoArrowBackOutline className="w-6 h-6" />
+                </button>
 
                 <h1 className="ml-6 text-lg font-semibold">Categories</h1>
             </header>
