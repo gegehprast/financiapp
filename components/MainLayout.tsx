@@ -15,7 +15,7 @@ const MainLayout = ({ children }: Props) => {
             {/* content */}
             <div className="relative w-full h-screen pb-[3rem] overflow-hidden">
                 <div className="w-full h-full overflow-y-auto" ref={content}>
-                    {auth.isLoggedIn ? children : null}
+                    {auth && auth.isLoggedIn ? children : null}
                 </div>
             </div>
 
