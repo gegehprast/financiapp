@@ -1,10 +1,13 @@
 import BankNotes from "@/components/icons/BankNotes"
 import CreditCard from "@/components/icons/CreditCard"
 import useAuth from "@/hooks/useAuth"
+import useWallet from "@/hooks/useWallet"
 import Link from "next/link"
+import { IoCardOutline, IoCashOutline } from "react-icons/io5"
 
 export default function Home() {
     const { auth } = useAuth()
+    const { wallets, isSuccess } = useWallet()
 
     return (
         <main className="p-4">
@@ -24,56 +27,28 @@ export default function Home() {
                 </div>
 
                 <ul>
-                    <li className="group hover:bg-gray-400">
-                        <Link href={'/wallet'} className="flex flex-col px-3 pb-3">
-                            <div className="w-full border-t group-hover:border-gray-400"></div>
+                    {wallets.map((wallet) => (
+                        <li key={wallet._id} className="group hover:bg-gray-400 hover:text-white">
+                            <Link href={'/wallet'} className="flex flex-col px-3 pb-3">
+                                <div className="w-full border-t group-hover:border-gray-400"></div>
 
-                            <div className="flex flex-row items-center justify-between mt-3">
-                                <div className="flex flex-row items-center">
-                                    <div className="w-6 h-6">
-                                        <CreditCard />
+                                <div className="flex flex-row items-center justify-between mt-3">
+                                    <div className="flex flex-row items-center">
+                                        {wallet.type === 'cash' ? (
+                                            <IoCashOutline className="w-6 h-6" />
+                                        ) : (
+                                            <IoCardOutline className="w-6 h-6" />
+                                        )}
+                                        <div className="ml-3 font-medium">{wallet.name}</div>
                                     </div>
-                                    <div className="ml-3 font-medium">Rekening BCA</div>
-                                </div>
 
-                                <div className="font-medium">Rp6,787,844</div>
-                            </div>
-                        </Link>
-                    </li>
-
-                    <li className="group hover:bg-gray-400">
-                        <Link href={'/wallet'} className="flex flex-col px-3 pb-3">
-                            <div className="w-full border-t group-hover:border-gray-400"></div>
-
-                            <div className="flex flex-row items-center justify-between mt-3">
-                                <div className="flex flex-row items-center">
-                                    <div className="w-6 h-6">
-                                        <CreditCard />
+                                    <div className="font-medium">
+                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(wallet.balance)}
                                     </div>
-                                    <div className="ml-3 font-medium">Jenius</div>
                                 </div>
-
-                                <div className="font-medium">Rp543,844</div>
-                            </div>
-                        </Link>
-                    </li>
-
-                    <li className="group hover:bg-gray-400">
-                        <Link href={'/wallet'} className="flex flex-col px-3 pb-3">
-                            <div className="w-full border-t group-hover:border-gray-400"></div>
-
-                            <div className="flex flex-row items-center justify-between mt-3">
-                                <div className="flex flex-row items-center">
-                                    <div className="w-6 h-6">
-                                        <CreditCard />
-                                    </div>
-                                    <div className="ml-3 font-medium">Cash</div>
-                                </div>
-
-                                <div className="font-medium">Rp2,500,000</div>
-                            </div>
-                        </Link>
-                    </li>
+                            </Link>
+                        </li>
+                    ))}
                 </ul>
             </section>
 

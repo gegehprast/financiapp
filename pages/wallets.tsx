@@ -1,105 +1,65 @@
-import ArrowLeft from '@/components/icons/ArrowLeft'
-import ArrowSmallLeft from '@/components/icons/ArrowSmallLeft'
-import BankNotes from '@/components/icons/BankNotes'
-import CreditCard from '@/components/icons/CreditCard'
 import EllipsisVertical from '@/components/icons/EllipsisVertical'
+import AddWalletModal from '@/components/modals/AddWalletModal'
+import useWallet from '@/hooks/useWallet'
 import Link from 'next/link'
+import Router from 'next/router'
 import React from 'react'
+import { IoAddOutline, IoArrowBackOutline, IoCardOutline, IoCashOutline } from 'react-icons/io5'
 
 const Wallets = () => {
+    const { wallets, isSuccess } = useWallet()
+    const [showModal, setShowModal] = React.useState(false)
+
     return (
-        <main>
+        <main className="relative">
             <header className="flex flex-row items-center p-4 bg-white">
-                <Link href={'/account'} className="w-6 h-6">
-                    <ArrowSmallLeft />
-                </Link>
+                <button type="button" onClick={() => Router.back()}>
+                    <IoArrowBackOutline className='w-6 h-6' />
+                </button>
 
                 <h1 className="ml-6 text-lg font-semibold">My Wallets</h1>
             </header>
 
+            {isSuccess && wallets.length === 0 && <div className="w-full mt-5 text-center">Belum ada wallet.</div>}
+
             <ul className="mt-5 bg-white">
-                <li className="group hover:bg-gray-400">
-                    <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
-                        <div className="flex flex-row items-center">
-                            <div className="w-8 h-8 group-hover:text-white">
-                                <CreditCard />
+                {wallets.map((wallet) => (
+                    <li className="group hover:bg-gray-400" key={wallet._id}>
+                        <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
+                            <div className="flex flex-row items-center">
+                                {wallet.type === 'cash' ? (
+                                    <IoCashOutline className="w-8 h-8 group-hover:text-white" />
+                                ) : (
+                                    <IoCardOutline className="w-8 h-8 group-hover:text-white" />
+                                )}
+
+                                <div className="flex flex-col justify-center ml-4">
+                                    <div className="font-medium group-hover:text-white">{wallet.name}</div>
+                                    <div className="text-gray-500 group-hover:text-white">
+                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(wallet.balance)}
+                                    </div>
+                                </div>
                             </div>
 
-                            <div className="flex flex-col justify-center ml-4">
-                                <div className="font-medium group-hover:text-white">Rekening BCA</div>
-                                <div className="text-gray-500 group-hover:text-white">Rp6,787,844</div>
+                            <div className="w-6 h-6">
+                                <EllipsisVertical />
                             </div>
-                        </div>
-
-                        <div className="w-6 h-6">
-                            <EllipsisVertical />
-                        </div>
-                    </Link>
-                </li>
-
-                <li className="group hover:bg-gray-400">
-                    <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
-                        <div className="flex flex-row items-center">
-                            <div className="w-8 h-8 group-hover:text-white">
-                                <CreditCard />
-                            </div>
-
-                            <div className="flex flex-col justify-center ml-4">
-                                <div className="font-medium group-hover:text-white">Jenius</div>
-                                <div className="text-gray-500 group-hover:text-white">Rp543,844</div>
-                            </div>
-                        </div>
-
-                        <div className="w-6 h-6">
-                            <EllipsisVertical />
-                        </div>
-                    </Link>
-                </li>
-
-                <li className="group hover:bg-gray-400">
-                    <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
-                        <div className="flex flex-row items-center">
-                            <div className="w-8 h-8 group-hover:text-white">
-                                <CreditCard />
-                            </div>
-
-                            <div className="flex flex-col justify-center ml-4">
-                                <div className="font-medium group-hover:text-white">Bibit</div>
-                                <div className="text-gray-500 group-hover:text-white">Rp25,543,844</div>
-                            </div>
-                        </div>
-
-                        <div className="w-6 h-6">
-                            <EllipsisVertical />
-                        </div>
-                    </Link>
-                </li>
-
-                <li className="group hover:bg-gray-400">
-                    <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
-                        <div className="flex flex-row items-center">
-                            <div className="w-8 h-8 group-hover:text-white">
-                                <BankNotes />
-                            </div>
-
-                            <div className="flex flex-col justify-center ml-4">
-                                <div className="font-medium group-hover:text-white">Cash</div>
-                                <div className="text-gray-500 group-hover:text-white">Rp2,500,000</div>
-                            </div>
-                        </div>
-
-                        <div className="w-6 h-6">
-                            <EllipsisVertical />
-                        </div>
-                    </Link>
-                </li>
+                        </Link>
+                    </li>
+                ))}
             </ul>
 
-            <div className='p-4'>
-                <button type="button" className="w-full p-4 font-medium text-white bg-green-500 rounded-lg hover:bg-green-600">
-                    Add wallet
+            <div className="p-4">
+                <button
+                    type="button"
+                    className="flex p-2 mx-auto font-medium text-white bg-green-500 rounded-full hover:bg-green-600"
+                    onClick={() => setShowModal(true)}
+                >
+                    <IoAddOutline className="w-10 h-10 mx-auto" />
                 </button>
             </div>
+
+            <AddWalletModal setShow={setShowModal} show={showModal} />
         </main>
     )
 }
