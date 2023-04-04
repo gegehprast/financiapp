@@ -1,72 +1,31 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import CalendarDays from './icons/CalendarDays'
-import ChartBar from './icons/ChartBar'
-import CloudArrowUp from './icons/CloudArrowUp'
-import CreditCard from './icons/CreditCard'
-import Folder from './icons/Folder'
-import Home from './icons/Home'
-import Photo from './icons/Photo'
-import Plus from './icons/Plus'
-import PlusCircle from './icons/PlusCircle'
-import Trash from './icons/Trash'
-import User from './icons/User'
-
-const routes = [
-    {
-        name: 'Home',
-        path: '/',
-        icon: <CalendarDays />,
-    },
-    {
-        name: 'Transactions',
-        path: '/photos',
-        icon: <Photo />,
-    },
-    {
-        name: 'Budgets',
-        path: '/upload',
-        icon: <CloudArrowUp />,
-    },
-    {
-        name: 'Wallet',
-        path: '/album',
-        icon: <Folder />,
-    },
-]
+import { IoAddCircle, IoDocumentLock, IoHome, IoPerson, IoPieChart } from 'react-icons/io5'
 
 const Menu = () => {
     const router = useRouter()
 
     return (
-        <div className="grid items-center justify-around w-full grid-flow-col grid-rows-1 overflow-clip">
+        <div className="grid items-center justify-around w-full grid-flow-col grid-rows-1 text-gray-500">
             <Link href="/">
-                <button type="button" className={`w-6 h-6`}>
-                    <Home />
-                </button>
+                <IoHome className={`w-6 h-6 hover:text-black`} />
             </Link>
 
             <Link href="/transactions">
-                <button type="button" className={`w-6 h-6`}>
-                    <ChartBar />
-                </button>
+                <IoPieChart className={`w-6 h-6 hover:text-black`} />
             </Link>
 
-            <button type="button" className={`w-16 h-16 mb-4`}>
-                <PlusCircle />
+            <button type="button">
+                <IoAddCircle className={`w-14 h-14 text-green-500 hover:text-green-600`} />
             </button>
 
             <Link href="/budgets">
-                <button type="button" className={`w-6 h-6`}>
-                    <CreditCard />
-                </button>
+                <IoDocumentLock className={`w-6 h-6 hover:text-black`} />
             </Link>
 
             <Link href="/account">
-                <button type="button" className={`w-6 h-6`}>
-                    <User />
-                </button>
+                <IoPerson className={`w-6 h-6 hover:text-black`} />
             </Link>
         </div>
     )
