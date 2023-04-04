@@ -4,7 +4,7 @@ import useWallet from '@/hooks/useWallet'
 import Link from 'next/link'
 import Router from 'next/router'
 import React from 'react'
-import { IoAddOutline, IoArrowBackOutline, IoCardOutline, IoCashOutline } from 'react-icons/io5'
+import { IoAddCircle, IoAddOutline, IoArrowBackOutline, IoCardOutline, IoCashOutline } from 'react-icons/io5'
 
 const Wallets = () => {
     const { wallets, isSuccess } = useWallet()
@@ -14,7 +14,7 @@ const Wallets = () => {
         <main className="relative">
             <header className="flex flex-row items-center p-4 bg-white">
                 <button type="button" onClick={() => Router.back()}>
-                    <IoArrowBackOutline className='w-6 h-6' />
+                    <IoArrowBackOutline className="w-6 h-6" />
                 </button>
 
                 <h1 className="ml-6 text-lg font-semibold">My Wallets</h1>
@@ -50,12 +50,8 @@ const Wallets = () => {
             </ul>
 
             <div className="p-4">
-                <button
-                    type="button"
-                    className="flex p-2 mx-auto font-medium text-white bg-green-500 rounded-full hover:bg-green-600"
-                    onClick={() => setShowModal(true)}
-                >
-                    <IoAddOutline className="w-10 h-10 mx-auto" />
+                <button type="button" className="flex mx-auto font-medium text-white rounded-full group" onClick={() => setShowModal(true)}>
+                    <IoAddCircle className="mx-auto text-green-500 w-14 h-14 group-hover:text-green-600" />
                 </button>
             </div>
 
