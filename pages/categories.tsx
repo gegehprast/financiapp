@@ -50,7 +50,7 @@ const Categories = () => {
                         {categories
                             .filter((category) => category.type === type)
                             .map((category) => (
-                                <li key={category.id} className="border-t group hover:bg-gray-400">
+                                <li key={category._id} className="border-t group hover:bg-gray-400">
                                     <Link href={'/wallets'} className="flex flex-row items-center p-2 font-medium group-hover:text-white">
                                         <Icon icon={category.icon} className="w-5 h-5" />
                                         <div className="ml-2">{category.name}</div>
