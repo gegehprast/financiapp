@@ -51,7 +51,7 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
                 balance,
             })
 
-            addWalletModal.setShow(false)
+            addWalletModal.close()
         } catch (error) {
             setError('Failed to add wallet.' + (error as Error).message)
         }
@@ -76,11 +76,11 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
             }`}
         >
             <header className="flex flex-row items-center p-4 bg-white">
-                <button type="button" onClick={() => addWalletModal.setShow(false)}>
+                <button type="button" onClick={addWalletModal.close}>
                     <IoCloseOutline className="w-6 h-6" />
                 </button>
 
-                <h1 className="ml-6 text-lg font-semibold">Add Wallet</h1>
+                <h1 className="ml-6 text-lg font-semibold">Tambah Wallet</h1>
             </header>
 
             <section className="p-4">
@@ -96,7 +96,7 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
                     />
                 </div>
                 <div className="w-full mt-2">
-                    <label className="text-sm text-gray-600">Balance</label>
+                    <label className="text-sm text-gray-600">Saldo</label>
                     <input
                         type="number"
                         value={balance}

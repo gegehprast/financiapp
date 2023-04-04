@@ -50,7 +50,7 @@ const Wallets = () => {
             </ul>
 
             <div className="p-4">
-                <button type="button" className="flex mx-auto font-medium text-white rounded-full group" onClick={() => addWalletModal.setShow(true)}>
+                <button type="button" className="flex mx-auto font-medium text-white rounded-full group" onClick={addWalletModal.open}>
                     <IoAddCircle className="mx-auto text-green-500 w-14 h-14 group-hover:text-green-600" />
                 </button>
             </div>

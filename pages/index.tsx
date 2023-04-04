@@ -30,16 +30,12 @@ export default function Home() {
                     </Link>
                 </div>
 
-                {isSuccess && (
+                {isSuccess && wallets.length === 0 && (
                     <div className="w-full p-4 text-center text-gray-600">
                         <div>Belum ada wallet.</div>
 
                         <div className="p-4">
-                            <button
-                                type="button"
-                                className="flex mx-auto font-medium text-white rounded-full group"
-                                onClick={() => addWalletModal.setShow(true)}
-                            >
+                            <button type="button" className="flex mx-auto font-medium text-white rounded-full group" onClick={addWalletModal.open}>
                                 <IoAddCircle className="mx-auto text-green-500 w-14 h-14 group-hover:text-green-600" />
                             </button>
                         </div>
