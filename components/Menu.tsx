@@ -1,11 +1,8 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { IoAddCircle, IoDocumentLock, IoHome, IoPerson, IoPieChart } from 'react-icons/io5'
 
 const Menu = () => {
-    const router = useRouter()
-
     return (
         <div className="grid items-center justify-around w-full grid-flow-col grid-rows-1 text-gray-500">
             <Link href="/">
