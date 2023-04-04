@@ -7,13 +7,17 @@ import { IoCardOutline, IoCashOutline } from "react-icons/io5"
 
 export default function Home() {
     const { auth } = useAuth()
-    const { wallets, isSuccess } = useWallet(2)
+    const { wallets, isSuccess } = useWallet()
 
     return (
         <main className="p-4">
             {/* total balance */}
             <section>
-                <h1 className="text-3xl font-semibold">Rp187,844,999</h1>
+                <h1 className="text-3xl font-semibold">
+                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+                        wallets.reduce((balance, wallet) => wallet.balance + balance, 0)
+                    )}
+                </h1>
                 <small className="text-base">Total balance</small>
             </section>
 
@@ -27,18 +31,14 @@ export default function Home() {
                 </div>
 
                 <ul>
-                    {wallets.map((wallet) => (
+                    {wallets.slice(0, 2).map((wallet) => (
                         <li key={wallet._id} className="group hover:bg-gray-400 hover:text-white">
                             <Link href={'/wallet'} className="flex flex-col px-3 pb-3">
                                 <div className="w-full border-t group-hover:border-gray-400"></div>
 
                                 <div className="flex flex-row items-center justify-between mt-3">
                                     <div className="flex flex-row items-center">
-                                        {wallet.type === 'cash' ? (
-                                            <IoCashOutline className="w-6 h-6" />
-                                        ) : (
-                                            <IoCardOutline className="w-6 h-6" />
-                                        )}
+                                        {wallet.type === 'cash' ? <IoCashOutline className="w-6 h-6" /> : <IoCardOutline className="w-6 h-6" />}
                                         <div className="ml-3 font-medium">{wallet.name}</div>
                                     </div>
 
