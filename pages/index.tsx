@@ -7,7 +7,7 @@ import { IoCardOutline, IoCashOutline } from "react-icons/io5"
 
 export default function Home() {
     const { auth } = useAuth()
-    const { wallets, isSuccess } = useWallet()
+    const { wallets, isSuccess } = useWallet(2)
 
     return (
         <main className="p-4">

@@ -10,7 +10,9 @@ import Wallet, { IWalletDoc } from '@/models/Wallet'
 
 async function index(req: NextApiRequest, res: NextApiResponse<MessageResponse | IWalletDoc[]>) {
     try {
-        const wallets = await Wallet.find({ userId: req.session.auth.user._id }).sort({ type: 1, createdAt: 1 })
+        const wallets = await Wallet.find({ userId: req.session.auth.user._id })
+            .sort({ type: 1, createdAt: 1 })
+            .limit(parseInt(req.query.limit as string))
 
         return res.json(wallets)
     } catch (error) {
