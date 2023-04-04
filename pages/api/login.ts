@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import withCORS from '@/middlewares/withCORS'
 import withDB from '@/middlewares/withDB'
 import User, { IUserDoc } from '@/models/User'
-import POST from '@/middlewares/POST'
+import methodPost from '@/middlewares/methodPost'
 import { ApiHandler } from '@/global'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { sessionOptions } from '@/lib/session'
@@ -51,4 +51,4 @@ const handler: ApiHandler<IUserDoc> = async (req, res) => {
     }
 }
 
-export default withIronSessionApiRoute(withCORS(POST(withDB(handler))), sessionOptions)
+export default withIronSessionApiRoute(withCORS(methodPost(withDB(handler))), sessionOptions)

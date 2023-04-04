@@ -1,6 +1,6 @@
 import withCORS from '@/middlewares/withCORS'
 import withDB from '@/middlewares/withDB'
-import POST from '@/middlewares/POST'
+import methodPost from '@/middlewares/methodPost'
 import { NextApiRequest, NextApiResponse } from 'next'
 import Category, { ICategoryDoc } from '@/models/Category'
 import { MessageResponse } from '@/global'
@@ -21,4 +21,4 @@ async function store(req: NextApiRequest, res: NextApiResponse<MessageResponse |
     }
 }
 
-export default withCORS(POST(withDB(store)))
+export default withCORS(methodPost(withDB(store)))

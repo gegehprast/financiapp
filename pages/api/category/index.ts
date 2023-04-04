@@ -5,7 +5,7 @@ import Category, { ICategoryDoc } from '@/models/Category'
 import { MessageResponse } from '@/global'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { sessionOptions } from '@/lib/session'
-import GET from '@/middlewares/GET'
+import methodGet from '@/middlewares/methodGet'
 import authenticated from '@/middlewares/authenticated'
 
 async function index(req: NextApiRequest, res: NextApiResponse<MessageResponse | ICategoryDoc[]>) {
@@ -18,4 +18,4 @@ async function index(req: NextApiRequest, res: NextApiResponse<MessageResponse |
     }
 }
 
-export default withIronSessionApiRoute(withCORS(GET(authenticated(withDB(index)))), sessionOptions)
+export default withIronSessionApiRoute(withCORS(methodGet(authenticated(withDB(index)))), sessionOptions)
