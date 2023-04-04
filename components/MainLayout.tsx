@@ -1,6 +1,8 @@
 import React, { ReactElement, useRef } from 'react'
 import Menu from './Menu'
 import useAuth from '@/hooks/useAuth'
+import AddWalletModal from './modals/AddWalletModal'
+import { useModal } from '@/contexts/ModalContext'
 
 interface Props {
     children: ReactElement
@@ -9,6 +11,7 @@ interface Props {
 const MainLayout = ({ children }: Props) => {
     const { auth } = useAuth({ redirectTo: '/login' })
     const content = useRef<HTMLDivElement>(null)
+    const { addWalletModal } = useModal()
 
     return (
         <div className="relative w-full h-screen mx-auto overflow-hidden bg-gray-200 lg:w-1/2 xl:w-1/4">
@@ -23,6 +26,8 @@ const MainLayout = ({ children }: Props) => {
             <footer className="fixed bottom-0 w-full h-[4rem] px-4 bg-white shadow-md z-10 flex items-center flex-row flex-nowrap lg:w-1/2 xl:w-1/4 overflow-visible">
                 <Menu />
             </footer>
+            
+            <AddWalletModal show={addWalletModal.show} />
         </div>
     )
 }

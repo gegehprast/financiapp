@@ -1,14 +1,14 @@
 import EllipsisVertical from '@/components/icons/EllipsisVertical'
-import AddWalletModal from '@/components/modals/AddWalletModal'
+import { useModal } from '@/contexts/ModalContext'
 import useWallet from '@/hooks/useWallet'
 import Link from 'next/link'
 import Router from 'next/router'
 import React from 'react'
-import { IoAddCircle, IoAddOutline, IoArrowBackOutline, IoCardOutline, IoCashOutline } from 'react-icons/io5'
+import { IoAddCircle, IoArrowBackOutline, IoCardOutline, IoCashOutline } from 'react-icons/io5'
 
 const Wallets = () => {
     const { wallets, isSuccess } = useWallet()
-    const [showModal, setShowModal] = React.useState(false)
+    const { addWalletModal } = useModal()
 
     return (
         <main className="relative">
@@ -50,12 +50,10 @@ const Wallets = () => {
             </ul>
 
             <div className="p-4">
-                <button type="button" className="flex mx-auto font-medium text-white rounded-full group" onClick={() => setShowModal(true)}>
+                <button type="button" className="flex mx-auto font-medium text-white rounded-full group" onClick={() => addWalletModal.setShow(true)}>
                     <IoAddCircle className="mx-auto text-green-500 w-14 h-14 group-hover:text-green-600" />
                 </button>
             </div>
-
-            <AddWalletModal setShow={setShowModal} show={showModal} />
         </main>
     )
 }

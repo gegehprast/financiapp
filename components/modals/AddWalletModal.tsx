@@ -1,3 +1,4 @@
+import { useModal } from '@/contexts/ModalContext'
 import { IWalletDoc } from '@/models/Wallet'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
@@ -6,7 +7,6 @@ import { IoCloseOutline } from 'react-icons/io5'
 
 interface AddWalletModalProps {
     show: boolean
-    setShow: (show: boolean) => void
 }
 
 const postAddWallet = (data: { name: string; type: string; balance: number }): Promise<IWalletDoc> =>
@@ -16,8 +16,9 @@ const postAddWallet = (data: { name: string; type: string; balance: number }): P
         balance: data.balance,
     })
 
-const AddWalletModal: React.FC<AddWalletModalProps> = ({ show, setShow }) => {
+const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
     const queryClient = useQueryClient()
+    const { addWalletModal } = useModal()
     const [name, setName] = React.useState('')
     const [type, setType] = React.useState('virtual')
     const [balance, setBalance] = React.useState(0)
@@ -50,9 +51,9 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show, setShow }) => {
                 balance,
             })
 
-            setShow(false)
-        } catch {
-            setError('Failed to add wallet')
+            addWalletModal.setShow(false)
+        } catch (error) {
+            setError('Failed to add wallet.' + (error as Error).message)
         }
 
         setLoading(false)
@@ -75,7 +76,7 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show, setShow }) => {
             }`}
         >
             <header className="flex flex-row items-center p-4 bg-white">
-                <button type="button" onClick={() => setShow(false)}>
+                <button type="button" onClick={() => addWalletModal.setShow(false)}>
                     <IoCloseOutline className="w-6 h-6" />
                 </button>
 
@@ -117,9 +118,7 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show, setShow }) => {
                         </label>
 
                         <label
-                            className={`flex flex-row items-center p-1 w-1/2 text-center rounded text-gray-600 ${
-                                type === 'cash' ? 'bg-white ' : ''
-                            }`}
+                            className={`flex flex-row items-center p-1 w-1/2 text-center rounded text-gray-600 ${type === 'cash' ? 'bg-white ' : ''}`}
                         >
                             <input type="radio" value="cash" checked={type === 'cash'} onChange={(e) => setType(e.target.value)} />
                             <div className="ml-2 ">Tunai</div>
@@ -144,6 +143,7 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show, setShow }) => {
                     >
                         Simpan
                     </button>
+                    {error && <div className="w-full mb-2 text-red-500">{error}</div>}
                 </div>
             </section>
         </div>

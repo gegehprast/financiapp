@@ -1,3 +1,4 @@
+import { useModal } from "@/contexts/ModalContext"
 import useAuth from "@/hooks/useAuth"
 import useWallet from "@/hooks/useWallet"
 import Link from "next/link"
@@ -6,9 +7,7 @@ import { IoAddCircle, IoCardOutline, IoCashOutline } from "react-icons/io5"
 
 export default function Home() {
     const { wallets, isSuccess } = useWallet()
-    const [showModal, setShowModal] = React.useState(false)
-
-    const LazyAddWalletModal = React.lazy(() => import("@/components/modals/AddWalletModal"))
+    const { addWalletModal } = useModal()
 
     return (
         <main className="p-4">
@@ -31,7 +30,7 @@ export default function Home() {
                     </Link>
                 </div>
 
-                {isSuccess && wallets.length === 0 && (
+                {isSuccess && (
                     <div className="w-full p-4 text-center text-gray-600">
                         <div>Belum ada wallet.</div>
 
@@ -39,15 +38,11 @@ export default function Home() {
                             <button
                                 type="button"
                                 className="flex mx-auto font-medium text-white rounded-full group"
-                                onClick={() => setShowModal(true)}
+                                onClick={() => addWalletModal.setShow(true)}
                             >
                                 <IoAddCircle className="mx-auto text-green-500 w-14 h-14 group-hover:text-green-600" />
                             </button>
                         </div>
-
-                        <React.Suspense fallback={<>...</>}>
-                            <LazyAddWalletModal setShow={setShowModal} show={showModal} />
-                        </React.Suspense>
                     </div>
                 )}
 
