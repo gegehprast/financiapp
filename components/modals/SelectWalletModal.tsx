@@ -24,7 +24,7 @@ const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select }) =
                     <IoArrowBackOutline className="w-6 h-6" />
                 </button>
 
-                <h1 className="ml-6 text-lg font-semibold">My Wallets</h1>
+                <h1 className="ml-6 text-lg font-semibold">Pilih Wallet</h1>
             </header>
 
             <ul className="mt-5 bg-white">
