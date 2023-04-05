@@ -14,6 +14,7 @@ import SelectWalletModal from './SelectWalletModal'
 import { IWalletDoc } from '@/models/Wallet'
 import { ICategoryDoc } from '@/models/Category'
 import SelectCategoryModal from './SelectCategoryModal'
+import axios from 'axios'
 
 interface AddTransactionModalProps {
     show: boolean
@@ -31,6 +32,20 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
     const [category, setCategory] = React.useState<ICategoryDoc>()
     const [note, setNote] = React.useState('')
     const [date, setDate] = React.useState(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
+
+    const handleSaveTransaction: React.MouseEventHandler<HTMLButtonElement> = async () => {
+        const resp = await axios.post('/api/transaction/store', {
+            amount: amount,
+            walletId: wallet?._id,
+            categoryId: category?._id,
+            note,
+            date,
+        })
+
+        if (resp.status === 200) {
+            addTransactionModal.close()
+        }
+    }
 
     React.useEffect(() => {
         if (show) {
@@ -59,7 +74,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                     <h1 className="ml-6 text-lg font-semibold">Buat Transaksi</h1>
                 </div>
 
-                <button type="button" className="font-medium text-green-400">
+                <button type="button" className="font-medium text-green-400" onClick={handleSaveTransaction}>
                     Simpan
                 </button>
             </header>
