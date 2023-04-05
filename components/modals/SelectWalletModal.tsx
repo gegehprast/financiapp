@@ -16,7 +16,7 @@ const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select }) =
     return (
         <div
             className={`fixed w-full left-0 top-0 bg-gray-200 h-[calc(100vh-4rem)] transition-transform duration-300 ease-in-out ${
-                show ? 'translate-y-0' : 'translate-y-full'
+                show ? 'translate-y-0' : 'translate-y-[calc(100%+4rem)]'
             }`}
         >
             <header className="flex flex-row items-center p-4 bg-white">
