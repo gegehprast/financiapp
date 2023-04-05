@@ -18,8 +18,7 @@ const Categories = () => {
 
                 <h1 className="ml-6 text-lg font-semibold">Categories</h1>
             </header>
-
-            {/* tab expense and income */}
+            
             <section className="mt-5 bg-white">
                 <div className="p-4">
                     <div className="flex flex-row items-center justify-around p-1 bg-gray-300 rounded">
