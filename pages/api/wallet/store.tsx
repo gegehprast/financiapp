@@ -11,7 +11,7 @@ import { withIronSessionApiRoute } from 'iron-session/next'
 async function store(req: NextApiRequest, res: NextApiResponse<MessageResponse | IWalletDoc>) {
     try {
         const wallet = new Wallet({
-            userId: req.session.auth.user._id,
+            user: req.session.auth.user._id,
             name: req.body.name,
             type: req.body.type,
             balance: req.body.balance,
