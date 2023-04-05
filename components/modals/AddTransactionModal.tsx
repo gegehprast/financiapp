@@ -1,16 +1,19 @@
 import { useModal } from '@/contexts/ModalContext'
 import React from 'react'
 import { IoApps, IoAppsOutline, IoCalendarOutline, IoCashOutline, IoCloseOutline, IoDocumentTextOutline, IoTextOutline, IoWalletOutline } from 'react-icons/io5'
+import SelectWalletModal from './SelectWalletModal'
+import { IWalletDoc } from '@/models/Wallet'
 
 interface AddTransactionModalProps {
     show: boolean
 }
 
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
-    const { addTransactionModal } = useModal()
+    const { addTransactionModal, walletModal } = useModal()
     const amountInputRef = React.useRef<HTMLInputElement>(null)
-    const [amount, setAmount] = React.useState(0)
+    const [amount, setAmount] = React.useState('')
     const [isEditingAmount, setIsEditingAmount] = React.useState(false)
+    const [wallet, setWallet] = React.useState<IWalletDoc>()
     const [note, setNote] = React.useState('')
     const [date, setDate] = React.useState(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
 
@@ -19,7 +22,8 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
             amountInputRef.current?.focus()
         }
 
-        setAmount(0)
+        setAmount('')
+        setWallet(undefined)
         setNote('')
     }, [show])
 
@@ -35,7 +39,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                         <IoCloseOutline className="w-6 h-6" />
                     </button>
 
-                    <h1 className="ml-6 text-lg font-semibold">Add Transaction</h1>
+                    <h1 className="ml-6 text-lg font-semibold">Buat Transaksi</h1>
                 </div>
 
                 <button type="button" className="font-medium text-green-400">
@@ -49,16 +53,20 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                     {isEditingAmount ? (
                         <input
                             type="number"
-                            value={amount.toFixed()}
-                            onChange={(e) => setAmount(parseFloat(e.target.value))}
+                            value={amount}
+                            onChange={(e) => setAmount(e.target.value)}
                             onBlur={() => setIsEditingAmount(false)}
+                            onKeyDown={(e) => e.key === 'Enter' && setIsEditingAmount(false)}
                             className="w-full p-2 ml-2 text-3xl text-black border-b border-green-400 outline-none focus:border-b-2"
                         />
                     ) : (
                         <input
                             type="text"
-                            value={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount)}
+                            value={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+                                isNaN(amount as unknown as number) ? 0 : (amount as unknown as number)
+                            )}
                             onFocus={() => setIsEditingAmount(true)}
+                            onClick={() => setIsEditingAmount(true)}
                             className="w-full p-2 ml-2 text-3xl text-black border-b border-green-400 outline-none focus:border-b-2"
                             readOnly
                         />
@@ -70,7 +78,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                     <input
                         type="text"
                         placeholder="Pilih wallet"
+                        value={wallet?.name || ''}
                         className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
+                        onFocus={walletModal.open}
+                        onClick={walletModal.open}
                     />
                 </div>
 
@@ -105,6 +116,8 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                     />
                 </div>
             </section>
+
+            <SelectWalletModal show={walletModal.show} select={setWallet} />
         </div>
     )
 }
