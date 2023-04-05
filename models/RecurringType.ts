@@ -52,7 +52,7 @@ export const RecurringPatternSchema: Schema = new Schema(
     { timestamps: true }
 )
 
-RecurringPatternSchema.index({ userId: 1, name: 1 }, { unique: true })
+RecurringPatternSchema.index({ transaction: 1, name: 1 }, { unique: true })
 
 const RecurringPattern: mongoose.Model<IRecurringPatternDoc, {}, {}, {}, any> =
     mongoose.models.RecurringPattern || mongoose.model<IRecurringPatternDoc>('RecurringPattern', RecurringPatternSchema)

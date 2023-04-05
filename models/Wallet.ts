@@ -40,7 +40,7 @@ export const WalletSchema: Schema = new Schema(
     { timestamps: true }
 )
 
-WalletSchema.index({ userId: 1, name: 1 }, { unique: true })
+WalletSchema.index({ user: 1, name: 1 }, { unique: true })
 WalletSchema.index({ type: 1, createdAt: 1 }, { unique: false })
 
 const Wallet: mongoose.Model<IWalletDoc, {}, {}, {}, any> = mongoose.models.Wallet || mongoose.model<IWalletDoc>('Wallet', WalletSchema)
