@@ -114,7 +114,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                         ref={walletInputRef}
                         type="text"
                         placeholder="Pilih wallet"
-                        value={wallet?.name || ''}
+                        defaultValue={wallet?.name || ''}
                         className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
                         onFocus={(e) => {
                             selectWalletModal.open()
@@ -131,7 +131,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                         ref={categoryInputRef}
                         type="text"
                         placeholder="Pilih kategori"
-                        value={category?.name || ''}
+                        defaultValue={category?.name || ''}
                         className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
                         onFocus={(e) => {
                             selectCategoryModal.open()
