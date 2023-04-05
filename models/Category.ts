@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
 export interface ICategoryDoc extends Document {
-    userId?: mongoose.Types.ObjectId
-    categoryId?: mongoose.Types.ObjectId
+    user?: mongoose.Types.ObjectId
+    category?: mongoose.Types.ObjectId
     name: string
     type: 'expense' | 'income' | 'debt'
     icon: string
@@ -12,12 +12,12 @@ export interface ICategoryDoc extends Document {
 
 export const CategorySchema: Schema = new Schema(
     {
-        userId: {
+        user: {
             type: mongoose.Types.ObjectId,
             required: false,
             ref: 'User',
         },
-        categoryId: {
+        category: {
             type: mongoose.Types.ObjectId,
             required: false,
             ref: 'Category',
@@ -40,7 +40,7 @@ export const CategorySchema: Schema = new Schema(
     { timestamps: true }
 )
 
-CategorySchema.index({ userId: 1, name: 1, type: 1 }, { unique: true })
+CategorySchema.index({ user: 1, name: 1, type: 1 }, { unique: true })
 
 const Category: mongoose.Model<ICategoryDoc, {}, {}, {}, any> = mongoose.models.Category || mongoose.model<ICategoryDoc>('Category', CategorySchema)
 

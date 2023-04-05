@@ -1,9 +1,27 @@
 import mongoose, { Schema, Document } from 'mongoose'
+import { ICategoryDoc } from './Category'
+import { IWalletDoc } from './Wallet'
+import { IUserDoc } from './User'
 
 export interface ITransactionDoc extends Document {
-    userId: mongoose.Types.ObjectId
-    categoryId: mongoose.Types.ObjectId
-    walletId: mongoose.Types.ObjectId
+    user: mongoose.Types.ObjectId
+    category: mongoose.Types.ObjectId
+    wallet: mongoose.Types.ObjectId
+    amount: number
+    notes?: string
+    date: Date
+    isRecurring: boolean
+    totalNumOfOccurrences?: number
+    nextOccurrence?: number
+    createdAt: Date
+    updatedAt: Date
+}
+
+export interface IPopulatedTransactionDoc {
+    _id: string
+    user: IUserDoc
+    category: ICategoryDoc
+    wallet: IWalletDoc
     amount: number
     notes?: string
     date: Date
@@ -16,17 +34,17 @@ export interface ITransactionDoc extends Document {
 
 export const TransactionSchema: Schema = new Schema(
     {
-        userId: {
+        user: {
             type: mongoose.Types.ObjectId,
             required: true,
             ref: 'User',
         },
-        categoryId: {
+        category: {
             type: mongoose.Types.ObjectId,
             required: true,
             ref: 'Category',
         },
-        walletId: {
+        wallet: {
             type: mongoose.Types.ObjectId,
             required: true,
             ref: 'Wallet',
@@ -60,7 +78,7 @@ export const TransactionSchema: Schema = new Schema(
     { timestamps: true }
 )
 
-TransactionSchema.index({ userId: 1, startDate: 1 }, { unique: false })
+TransactionSchema.index({ userId: 1, date: -1 }, { unique: false })
 
 const Transaction: mongoose.Model<ITransactionDoc, {}, {}, {}, any> = mongoose.models.Transaction || mongoose.model<ITransactionDoc>('Transaction', TransactionSchema)
 

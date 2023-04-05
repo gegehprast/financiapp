@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IRecurringPatternDoc extends Document {
-    transactionId: mongoose.Types.ObjectId
+    transaction: mongoose.Types.ObjectId
     separationCount?: number
     dayOfWeek?: number
     dayOfMonth?: number
@@ -15,7 +15,7 @@ export interface IRecurringPatternDoc extends Document {
 
 export const RecurringPatternSchema: Schema = new Schema(
     {
-        transactionId: {
+        transaction: {
             type: mongoose.Types.ObjectId,
             required: true,
             ref: 'RecurringPattern',

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IWalletDoc extends Document {
-    userId: mongoose.Types.ObjectId
+    user: mongoose.Types.ObjectId
     name: string
     type: 'cash' | 'virtual'
     balance: number
@@ -12,7 +12,7 @@ export interface IWalletDoc extends Document {
 
 export const WalletSchema: Schema = new Schema(
     {
-        userId: {
+        user: {
             type: mongoose.Types.ObjectId,
             required: true,
             ref: 'User',

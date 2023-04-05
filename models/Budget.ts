@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IBudgetDoc extends Document {
-    userId: mongoose.Types.ObjectId
-    categoryId: mongoose.Types.ObjectId
-    walletId: mongoose.Types.ObjectId
+    user: mongoose.Types.ObjectId
+    category: mongoose.Types.ObjectId
+    wallet: mongoose.Types.ObjectId
     name: string
     value: number
     isRepeating: boolean
@@ -16,17 +16,17 @@ export interface IBudgetDoc extends Document {
 
 export const BudgetSchema: Schema = new Schema(
     {
-        userId: {
+        user: {
             type: mongoose.Types.ObjectId,
             required: true,
             ref: 'User',
         },
-        categoryId: {
+        category: {
             type: mongoose.Types.ObjectId,
             required: true,
             ref: 'Category',
         },
-        walletId: {
+        wallet: {
             type: mongoose.Types.ObjectId,
             required: true,
             ref: 'Wallet',
@@ -61,7 +61,7 @@ export const BudgetSchema: Schema = new Schema(
     { timestamps: true }
 )
 
-BudgetSchema.index({ userId: 1, name: 1 }, { unique: true })
+BudgetSchema.index({ user: 1, name: 1 }, { unique: true })
 
 const Budget: mongoose.Model<IBudgetDoc, {}, {}, {}, any> = mongoose.models.Budget || mongoose.model<IBudgetDoc>('Budget', BudgetSchema)
 
