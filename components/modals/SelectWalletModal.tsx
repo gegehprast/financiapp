@@ -10,7 +10,7 @@ interface SelectWalletModalProps {
 }
 
 const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select }) => {
-    const { walletModal } = useModal()
+    const { selectWalletModal } = useModal()
     const { wallets, isSuccess } = useWallet()
 
     return (
@@ -20,7 +20,7 @@ const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select }) =
             }`}
         >
             <header className="flex flex-row items-center p-4 bg-white">
-                <button type="button" onClick={walletModal.close}>
+                <button type="button" onClick={selectWalletModal.close}>
                     <IoArrowBackOutline className="w-6 h-6" />
                 </button>
 
@@ -30,7 +30,14 @@ const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select }) =
             <ul className="mt-5 bg-white">
                 {wallets.map((wallet) => (
                     <li className="group hover:bg-gray-400" key={wallet._id}>
-                        <button onClick={() => {select(wallet); walletModal.close()}} type="button" className="flex flex-row items-center w-full p-4">
+                        <button
+                            onClick={() => {
+                                select(wallet)
+                                selectWalletModal.close()
+                            }}
+                            type="button"
+                            className="flex flex-row items-center w-full p-4"
+                        >
                             {wallet.type === 'cash' ? (
                                 <IoCashOutline className="w-8 h-8 group-hover:text-white" />
                             ) : (
