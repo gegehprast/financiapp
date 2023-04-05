@@ -1,12 +1,12 @@
 import Icon from '@/components/Icon'
-import useCategories from '@/hooks/useCategories'
+import useCategory from '@/hooks/useCategory'
 import Link from 'next/link'
 import Router from 'next/router'
 import React from 'react'
 import { IoArrowBackOutline } from 'react-icons/io5'
 
 const Categories = () => {
-    const { categories, isLoading } = useCategories()
+    const { categories, isLoading } = useCategory()
     const [type, setType] = React.useState<'expense' | 'income'>('expense')
 
     return (

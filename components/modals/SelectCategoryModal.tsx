@@ -1,9 +1,9 @@
 import { useModal } from '@/contexts/ModalContext'
-import useCategories from '@/hooks/useCategories'
 import { ICategoryDoc } from '@/models/Category'
 import React from 'react'
 import { IoArrowBackOutline } from 'react-icons/io5'
 import Icon from '../Icon'
+import useCategory from '@/hooks/useCategory'
 
 interface SelectCategoryModalProps {
     show: boolean
@@ -12,7 +12,7 @@ interface SelectCategoryModalProps {
 
 const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select }) => {
     const { selectCategoryModal } = useModal()
-    const { categories, isLoading } = useCategories()
+    const { categories, isLoading } = useCategory()
     const [type, setType] = React.useState<'expense' | 'income'>('expense')
 
     return (
