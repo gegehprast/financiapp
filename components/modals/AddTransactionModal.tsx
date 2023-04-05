@@ -61,125 +61,127 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
 
     return (
         <div
-            className={`fixed w-full left-0 top-0 bg-gray-200 h-[calc(100vh-4rem)] transition-transform duration-300 ease-in-out ${
+            className={`fixed w-screen left-0 top-0 h-[calc(100vh-4rem)] transition-transform duration-300 ease-in-out ${
                 show ? 'translate-y-0' : 'translate-y-[calc(100%+4rem)]'
             }`}
         >
-            <header className="flex flex-row items-center justify-between p-4 bg-white">
-                <div className="flex flex-row items-center">
-                    <button type="button" onClick={addTransactionModal.close}>
-                        <IoCloseOutline className="w-6 h-6" />
+            <div className="w-full h-full mx-auto bg-gray-200 lg:w-1/2 xl:w-1/4">
+                <header className="flex flex-row items-center justify-between p-4 bg-white">
+                    <div className="flex flex-row items-center">
+                        <button type="button" onClick={addTransactionModal.close}>
+                            <IoCloseOutline className="w-6 h-6" />
+                        </button>
+
+                        <h1 className="ml-6 text-lg font-semibold">Buat Transaksi</h1>
+                    </div>
+
+                    <button type="button" className="font-medium text-green-400" onClick={handleSaveTransaction}>
+                        Simpan
                     </button>
+                </header>
 
-                    <h1 className="ml-6 text-lg font-semibold">Buat Transaksi</h1>
-                </div>
+                <section className="p-4 mt-5 bg-white">
+                    <div className="flex flex-row items-center w-full">
+                        <IoCashOutline className="w-8 h-8" />
+                        {isEditingAmount ? (
+                            <input
+                                type="number"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                                onBlur={() => setIsEditingAmount(false)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' || e.key === 'Tab') {
+                                        if (wallet) {
+                                            e.preventDefault()
+                                        }
 
-                <button type="button" className="font-medium text-green-400" onClick={handleSaveTransaction}>
-                    Simpan
-                </button>
-            </header>
-
-            <section className="p-4 mt-5 bg-white">
-                <div className="flex flex-row items-center w-full">
-                    <IoCashOutline className="w-8 h-8" />
-                    {isEditingAmount ? (
-                        <input
-                            type="number"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            onBlur={() => setIsEditingAmount(false)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === 'Tab') {
-                                    if (wallet) {
-                                        e.preventDefault()
+                                        setIsEditingAmount(false)
                                     }
+                                }}
+                                onKeyUp={(e) => {
+                                    if (e.key === 'Enter' || e.key === 'Tab') {
+                                        if (wallet) {
+                                            e.preventDefault()
+                                        }
 
-                                    setIsEditingAmount(false)
-                                }
-                            }}
-                            onKeyUp={(e) => {
-                                if (e.key === 'Enter' || e.key === 'Tab') {
-                                    if (wallet) {
-                                        e.preventDefault()
+                                        setIsEditingAmount(false)
                                     }
+                                }}
+                                className="w-full p-2 ml-2 text-3xl text-black border-b border-green-400 outline-none focus:border-b-2"
+                            />
+                        ) : (
+                            <input
+                                ref={amountInputRef}
+                                type="text"
+                                value={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+                                    isNaN(amount as unknown as number) ? 0 : (amount as unknown as number)
+                                )}
+                                onFocus={() => setIsEditingAmount(true)}
+                                onClick={() => setIsEditingAmount(true)}
+                                className="w-full p-2 ml-2 text-3xl text-black border-b border-green-400 outline-none focus:border-b-2"
+                                readOnly
+                            />
+                        )}
+                    </div>
 
-                                    setIsEditingAmount(false)
-                                }
-                            }}
-                            className="w-full p-2 ml-2 text-3xl text-black border-b border-green-400 outline-none focus:border-b-2"
-                        />
-                    ) : (
+                    <div className="flex flex-row items-center w-full mt-4">
+                        <IoWalletOutline className="w-8 h-8" />
                         <input
-                            ref={amountInputRef}
+                            ref={walletInputRef}
                             type="text"
-                            value={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
-                                isNaN(amount as unknown as number) ? 0 : (amount as unknown as number)
-                            )}
-                            onFocus={() => setIsEditingAmount(true)}
-                            onClick={() => setIsEditingAmount(true)}
-                            className="w-full p-2 ml-2 text-3xl text-black border-b border-green-400 outline-none focus:border-b-2"
-                            readOnly
+                            placeholder="Pilih wallet"
+                            defaultValue={wallet?.name || ''}
+                            className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
+                            onFocus={(e) => {
+                                selectWalletModal.open()
+                                e.currentTarget.blur()
+                            }}
+                            onClick={selectWalletModal.open}
+                            readOnly={!!wallet}
                         />
-                    )}
-                </div>
+                    </div>
 
-                <div className="flex flex-row items-center w-full mt-4">
-                    <IoWalletOutline className="w-8 h-8" />
-                    <input
-                        ref={walletInputRef}
-                        type="text"
-                        placeholder="Pilih wallet"
-                        defaultValue={wallet?.name || ''}
-                        className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
-                        onFocus={(e) => {
-                            selectWalletModal.open()
-                            e.currentTarget.blur()
-                        }}
-                        onClick={selectWalletModal.open}
-                        readOnly={!!wallet}
-                    />
-                </div>
+                    <div className="flex flex-row items-center w-full mt-4">
+                        <IoAppsOutline className="w-8 h-8" />
+                        <input
+                            ref={categoryInputRef}
+                            type="text"
+                            placeholder="Pilih kategori"
+                            defaultValue={category?.name || ''}
+                            className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
+                            onFocus={(e) => {
+                                selectCategoryModal.open()
+                                e.currentTarget.blur()
+                            }}
+                            onClick={selectCategoryModal.open}
+                            readOnly={!!category}
+                        />
+                    </div>
 
-                <div className="flex flex-row items-center w-full mt-4">
-                    <IoAppsOutline className="w-8 h-8" />
-                    <input
-                        ref={categoryInputRef}
-                        type="text"
-                        placeholder="Pilih kategori"
-                        defaultValue={category?.name || ''}
-                        className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
-                        onFocus={(e) => {
-                            selectCategoryModal.open()
-                            e.currentTarget.blur()
-                        }}
-                        onClick={selectCategoryModal.open}
-                        readOnly={!!category}
-                    />
-                </div>
+                    <div className="flex flex-row items-center w-full mt-4">
+                        <IoCalendarOutline className="w-8 h-8" />
+                        <input
+                            ref={dateInputRef}
+                            type="date"
+                            value={date.toISOString().split('T')[0]}
+                            onChange={(e) => setDate(new Date(e.target.value))}
+                            placeholder="Pilih kategori"
+                            className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
+                        />
+                    </div>
 
-                <div className="flex flex-row items-center w-full mt-4">
-                    <IoCalendarOutline className="w-8 h-8" />
-                    <input
-                        ref={dateInputRef}
-                        type="date"
-                        value={date.toISOString().split('T')[0]}
-                        onChange={(e) => setDate(new Date(e.target.value))}
-                        placeholder="Pilih kategori"
-                        className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
-                    />
-                </div>
-
-                <div className="flex flex-row items-center w-full mt-4">
-                    <IoDocumentTextOutline className="w-8 h-8" />
-                    <textarea
-                        value={note}
-                        placeholder="Tulis catatan"
-                        rows={3}
-                        onChange={(e) => setNote(e.target.value)}
-                        className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
-                    />
-                </div>
-            </section>
+                    <div className="flex flex-row items-center w-full mt-4">
+                        <IoDocumentTextOutline className="w-8 h-8" />
+                        <textarea
+                            value={note}
+                            placeholder="Tulis catatan"
+                            rows={3}
+                            onChange={(e) => setNote(e.target.value)}
+                            className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
+                        />
+                    </div>
+                </section>
+            </div>
 
             <SelectWalletModal
                 show={selectWalletModal.show}
