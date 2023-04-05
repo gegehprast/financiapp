@@ -1,13 +1,16 @@
-import { useModal } from "@/contexts/ModalContext"
-import useAuth from "@/hooks/useAuth"
-import useWallet from "@/hooks/useWallet"
-import Link from "next/link"
-import React from "react"
-import { IoAddCircle, IoCardOutline, IoCashOutline } from "react-icons/io5"
+import Icon from '@/components/Icon'
+import { useModal } from '@/contexts/ModalContext'
+import useAuth from '@/hooks/useAuth'
+import useTransaction from '@/hooks/useTransaction'
+import useWallet from '@/hooks/useWallet'
+import Link from 'next/link'
+import React from 'react'
+import { IoAddCircle, IoCardOutline, IoCashOutline } from 'react-icons/io5'
 
 export default function Home() {
     const { wallets, isSuccess } = useWallet()
     const { addWalletModal } = useModal()
+    const { transactions } = useTransaction()
 
     return (
         <main className="p-4">
@@ -74,44 +77,32 @@ export default function Home() {
                 </div>
 
                 <ul>
-                    <li className="group hover:bg-gray-400">
-                        <Link href={'/wallet'} className="flex flex-col px-3 pb-2">
-                            <div className="w-full border-t group-hover:border-gray-400"></div>
-                            <div className="flex flex-row items-center justify-between mt-2">
-                                <div className="flex flex-col">
-                                    <div className="font-medium">Transportation</div>
-                                    <div className="text-sm text-gray-500 group-hover:text-white">1 April 2023</div>
-                                </div>
-                                <div className="font-medium text-red-500">-Rp22,844</div>
-                            </div>
-                        </Link>
-                    </li>
+                    {transactions.slice(0, 3).map((transaction) => (
+                        <li key={transaction._id} className="group hover:bg-gray-400">
+                            <Link href={'/wallet'} className="flex flex-col px-3 pb-2">
+                                <div className="w-full border-t group-hover:border-gray-400"></div>
+                                <div className="flex flex-row items-center justify-between mt-2">
+                                    <div className="flex flex-row items-center mt-2">
+                                        <Icon icon={transaction.category.icon} className="w-6 h-6" />
+                                        <div className="flex flex-col ml-3">
+                                            <div className="font-medium">{transaction.category.name}</div>
+                                            <div className="text-sm text-gray-500 group-hover:text-white">
+                                                {transaction.date.toLocaleString('id-ID', {
+                                                    dateStyle: 'full',
+                                                    timeZone: 'Asia/Jakarta',
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
 
-                    <li className="group hover:bg-gray-400">
-                        <Link href={'/wallet'} className="flex flex-col px-3 pb-2">
-                            <div className="w-full border-t group-hover:border-gray-400"></div>
-                            <div className="flex flex-row items-center justify-between mt-2">
-                                <div className="flex flex-col">
-                                    <div className="font-medium">Food & Beverages</div>
-                                    <div className="text-sm text-gray-500 group-hover:text-white">1 April 2023</div>
+                                    <div className={`font-medium ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
+                                        {transaction.category.type === 'expense' ? '-' : ''}
+                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(transaction.amount)}
+                                    </div>
                                 </div>
-                                <div className="font-medium text-red-500">-Rp55,844</div>
-                            </div>
-                        </Link>
-                    </li>
-
-                    <li className="group hover:bg-gray-400">
-                        <Link href={'/wallet'} className="flex flex-col px-3 pb-2">
-                            <div className="w-full border-t group-hover:border-gray-400"></div>
-                            <div className="flex flex-row items-center justify-between mt-2">
-                                <div className="flex flex-col">
-                                    <div className="font-medium">Salary</div>
-                                    <div className="text-sm text-gray-500 group-hover:text-white">28 March 2023</div>
-                                </div>
-                                <div className="font-medium text-blue-500">Rp6,787,844</div>
-                            </div>
-                        </Link>
-                    </li>
+                            </Link>
+                        </li>
+                    ))}
                 </ul>
             </section>
 
