@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React from 'react'
 
 interface ModalContextProps {
@@ -16,9 +17,16 @@ const ModalContext = React.createContext<ModalContextProps>({
 })
 
 export const ModalProvider: React.FC<{ children: JSX.Element }> = ({ children }) => {
+    const router = useRouter()
     const [showAddWalletModal, setShowAddWalletModal] = React.useState(false)
     const [showAddTransactionModal, setShowAddTransactionModal] = React.useState(false)
     const [showWalletModal, setShowWalletModal] = React.useState(false)
+
+    React.useEffect(() => {
+        setShowAddWalletModal(false)
+        setShowAddTransactionModal(false)
+        setShowWalletModal(false)
+    }, [router.pathname])
 
     return (
         <ModalContext.Provider
