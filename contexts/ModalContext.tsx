@@ -26,7 +26,7 @@ export const ModalProvider: React.FC<{ children: JSX.Element }> = ({ children })
         setShowAddWalletModal(false)
         setShowAddTransactionModal(false)
         setShowWalletModal(false)
-    }, [router.pathname])
+    }, [router])
 
     return (
         <ModalContext.Provider
