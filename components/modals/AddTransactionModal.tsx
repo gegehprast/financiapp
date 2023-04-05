@@ -183,20 +183,24 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                 </section>
             </div>
 
-            <SelectWalletModal
-                show={selectWalletModal.show}
-                select={(wallet: IWalletDoc) => {
-                    setWallet(wallet)
-                    !category && categoryInputRef.current?.focus()
-                }}
-            />
-            <SelectCategoryModal
-                show={selectCategoryModal.show}
-                select={(category: ICategoryDoc) => {
-                    setCategory(category)
-                    dateInputRef.current?.showPicker()
-                }}
-            />
+            {show && (
+                <>
+                    <SelectWalletModal
+                        show={selectWalletModal.show}
+                        select={(wallet: IWalletDoc) => {
+                            setWallet(wallet)
+                            !category && categoryInputRef.current?.focus()
+                        }}
+                    />
+                    <SelectCategoryModal
+                        show={selectCategoryModal.show}
+                        select={(category: ICategoryDoc) => {
+                            setCategory(category)
+                            dateInputRef.current?.showPicker()
+                        }}
+                    />
+                </>
+            )}
         </div>
     )
 }
