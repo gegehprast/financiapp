@@ -1,13 +1,11 @@
 import { useModal } from '@/contexts/ModalContext'
 import React from 'react'
 import {
-    IoApps,
     IoAppsOutline,
     IoCalendarOutline,
     IoCashOutline,
     IoCloseOutline,
     IoDocumentTextOutline,
-    IoTextOutline,
     IoWalletOutline,
 } from 'react-icons/io5'
 import SelectWalletModal from './SelectWalletModal'
@@ -15,12 +13,31 @@ import { IWalletDoc } from '@/models/Wallet'
 import { ICategoryDoc } from '@/models/Category'
 import SelectCategoryModal from './SelectCategoryModal'
 import axios from 'axios'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 interface AddTransactionModalProps {
     show: boolean
 }
 
+interface IPostAddTransaction {
+    amount: number
+    walletId: string
+    categoryId: string
+    note: string
+    date: Date
+}
+
+const postAddTransaction = (data: IPostAddTransaction): Promise<IWalletDoc> =>
+    axios.post('/api/transaction/store', {
+        amount: data.amount,
+        walletId: data.walletId,
+        categoryId: data.categoryId,
+        note: data.note,
+        date: data.date,
+    })
+
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
+    const queryClient = useQueryClient()
     const { addTransactionModal, selectWalletModal, selectCategoryModal } = useModal()
     const amountInputRef = React.useRef<HTMLInputElement>(null)
     const walletInputRef = React.useRef<HTMLInputElement>(null)
@@ -32,19 +49,37 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
     const [category, setCategory] = React.useState<ICategoryDoc>()
     const [note, setNote] = React.useState('')
     const [date, setDate] = React.useState(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
+    const [error, setError] = React.useState<string>('')
+    const [loading, setLoading] = React.useState<boolean>(false)
+
+    const transactionsMutation = useMutation({
+        mutationFn: postAddTransaction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['transactions'] })
+            queryClient.invalidateQueries({ queryKey: ['wallets'] })
+            setLoading(false)
+            addTransactionModal.close()
+        },
+        onError: (error) => {
+            setError('Failed to add wallet.' + (error as Error).message)
+        },
+    })
 
     const handleSaveTransaction: React.MouseEventHandler<HTMLButtonElement> = async () => {
-        const resp = await axios.post('/api/transaction/store', {
-            amount: amount,
+        if (loading) {
+            return
+        }
+
+        setError('')
+        setLoading(true)
+
+        transactionsMutation.mutate({
+            amount: parseFloat(amount),
             walletId: wallet?._id,
             categoryId: category?._id,
             note,
             date,
         })
-
-        if (resp.status === 200) {
-            addTransactionModal.close()
-        }
     }
 
     React.useEffect(() => {
@@ -181,6 +216,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                         />
                     </div>
                 </section>
+                {error && <div className="w-full mb-2 text-red-500">{error}</div>}
             </div>
 
             {show && (
