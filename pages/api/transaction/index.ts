@@ -17,10 +17,10 @@ async function index(req: NextApiRequest, res: NextApiResponse<MessageResponse |
             user: req.session.auth.user._id,
         }
 
-        if (req.query.date) {
+        if (req.query.startDate && req.query.endDate) {
             filter.date = {
-                $gte: new Date(req.query.date as string).setUTCHours(0, 0, 0, 0),
-                $lte: new Date(req.query.date as string).setUTCHours(23, 59, 59, 999),
+                $gte: new Date(req.query.startDate as string).setUTCHours(0, 0, 0, 0),
+                $lte: new Date(req.query.endDate as string).setUTCHours(23, 59, 59, 999),
             }
         }
 

@@ -3,10 +3,19 @@ import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { IPopulatedTransactionDoc, ITransactionDoc } from '@/models/Transaction'
 
-const getTransactions = (limit?: number): Promise<IPopulatedTransactionDoc[]> => axios.get(`/api/transaction?limit=${limit || ''}`).then((res) => res.data)
+export interface IGetTransactionsQuery {
+    limit?: number
+    startDate?: string
+    endDate?: string
+}
 
-export default function useTransaction(limit?: number) {
-    const { data, isLoading, isSuccess } = useQuery({ queryKey: ['transactions', limit], queryFn: () => getTransactions(limit), initialData: [] })
+const getTransactions = (query: IGetTransactionsQuery): Promise<IPopulatedTransactionDoc[]> =>
+    axios
+        .get(`/api/transaction?startDate=${query.startDate || ''}&endDate=${query.endDate || ''}&limit=${query.limit || ''}`)
+        .then((res) => res.data)
+
+export default function useTransaction(query: IGetTransactionsQuery) {
+    const { data, isLoading, isSuccess } = useQuery({ queryKey: ['transactions', query], queryFn: () => getTransactions(query), initialData: [] })
     const [transactions, setTransactions] = React.useState<IPopulatedTransactionDoc[]>(data)
 
     React.useEffect(() => {
