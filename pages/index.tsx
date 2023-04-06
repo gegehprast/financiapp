@@ -10,7 +10,7 @@ import { IoAddCircle, IoCardOutline, IoCashOutline } from 'react-icons/io5'
 export default function Home() {
     const { wallets, isSuccess } = useWallet()
     const { addWalletModal } = useModal()
-    const { transactions } = useTransaction()
+    const { transactions } = useTransaction({ query: { limit: 3 } })
 
     return (
         <main className="p-4">
@@ -46,7 +46,7 @@ export default function Home() {
                 )}
 
                 <ul>
-                    {wallets.slice(0, 2).map((wallet) => (
+                    {wallets.map((wallet) => (
                         <li key={wallet._id} className="group hover:bg-gray-400 hover:text-white">
                             <Link href={'/wallet'} className="flex flex-col px-3 pb-3">
                                 <div className="w-full border-t group-hover:border-gray-400"></div>
@@ -77,7 +77,7 @@ export default function Home() {
                 </div>
 
                 <ul>
-                    {transactions.slice(0, 3).map((transaction) => (
+                    {transactions.map((transaction) => (
                         <li key={transaction._id} className="group hover:bg-gray-400">
                             <Link href={'/wallet'} className="flex flex-col px-3 pb-2">
                                 <div className="w-full border-t group-hover:border-gray-400"></div>
