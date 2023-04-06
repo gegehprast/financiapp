@@ -26,11 +26,15 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
     const [loading, setLoading] = React.useState<boolean>(false)
     const nameInputRef = React.useRef<HTMLInputElement>(null)
 
-    const mutation = useMutation({
+    const walletsMutation = useMutation({
         mutationFn: postAddWallet,
         onSuccess: () => {
-            // Invalidate and refetch
             queryClient.invalidateQueries({ queryKey: ['wallets'] })
+            setLoading(false)
+            addWalletModal.close()
+        },
+        onError: (error) => {
+            setError('Failed to add wallet.' + (error as Error).message)
         },
     })
 
@@ -44,19 +48,11 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
         setError('')
         setLoading(true)
 
-        try {
-            mutation.mutate({
-                name,
-                type,
-                balance,
-            })
-
-            addWalletModal.close()
-        } catch (error) {
-            setError('Failed to add wallet.' + (error as Error).message)
-        }
-
-        setLoading(false)
+        walletsMutation.mutate({
+            name,
+            type,
+            balance,
+        })
     }
 
     useEffect(() => {
