@@ -6,24 +6,35 @@ import { withIronSessionApiRoute } from 'iron-session/next'
 import { sessionOptions } from '@/lib/session'
 import methodGet from '@/middlewares/methodGet'
 import authenticated from '@/middlewares/authenticated'
-import Transaction, { IPopulatedTransactionDoc } from '@/models/Transaction'
+import Transaction, { IPopulatedTransactionDoc, ITransactionDoc } from '@/models/Transaction'
 import Category from '@/models/Category'
 import Wallet from '@/models/Wallet'
-import User from '@/models/User'
+import { FilterQuery } from 'mongoose'
 
 async function index(req: NextApiRequest, res: NextApiResponse<MessageResponse | IPopulatedTransactionDoc[]>) {
     try {
-        const transactions = await Transaction.find({ user: req.session.auth.user._id })
+        const filter: FilterQuery<ITransactionDoc> = {
+            user: req.session.auth.user._id,
+        }
+
+        if (req.query.date) {
+            filter.date = {
+                $gte: new Date(req.query.date as string).setUTCHours(0, 0, 0, 0),
+                $lte: new Date(req.query.date as string).setUTCHours(23, 59, 59, 999),
+            }
+        }
+
+        const transactions = await Transaction.find(filter)
             .sort({ date: -1 })
             .populate([
                 {
                     path: 'category',
-                    model: Category
+                    model: Category,
                 },
                 {
                     path: 'wallet',
-                    model: Wallet
-                }
+                    model: Wallet,
+                },
             ])
             .limit(parseInt(req.query.limit as string))
 
