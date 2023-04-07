@@ -5,6 +5,7 @@ import { IPopulatedTransactionDoc, ITransactionDoc } from '@/models/Transaction'
 
 export interface IGetTransactionsQuery {
     limit?: number
+    walletId?: string
     startDate?: string
     endDate?: string
 }
@@ -16,12 +17,19 @@ export interface IUseTransactionProps {
 
 const getTransactions = (query: IGetTransactionsQuery): Promise<IPopulatedTransactionDoc[]> =>
     axios
-        .get(`/api/transaction?startDate=${query.startDate || ''}&endDate=${query.endDate || ''}&limit=${query.limit || ''}`)
+        .get(
+            `/api/transaction?walletId=${query.walletId || ''}&startDate=${query.startDate || ''}&endDate=${query.endDate || ''}&limit=${query.limit || ''}`
+        )
         .then((res) => res.data)
 
 export default function useTransaction({ mutationFn, query }: IUseTransactionProps = { query: {} }) {
     const queryClient = useQueryClient()
-    const { data, isLoading, isSuccess } = useQuery({ queryKey: ['transactions', query], queryFn: () => getTransactions(query), initialData: [] })
+    const { data, isLoading, isSuccess } = useQuery({
+        queryKey: ['transactions', query],
+        queryFn: () => getTransactions(query),
+        keepPreviousData: true,
+        initialData: [],
+    })
     const [transactions, setTransactions] = React.useState<IPopulatedTransactionDoc[]>(data)
 
     const mutation = useMutation({
