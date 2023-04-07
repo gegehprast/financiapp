@@ -2,14 +2,15 @@ import { useModal } from '@/contexts/ModalContext'
 import useWallet from '@/hooks/useWallet'
 import { IWalletDoc } from '@/models/Wallet'
 import React from 'react'
-import { IoArrowBackOutline, IoCardOutline, IoCashOutline, IoCloseOutline } from 'react-icons/io5'
+import { IoArrowBackOutline, IoCardOutline, IoCashOutline, IoCloseOutline, IoGlobeOutline } from 'react-icons/io5'
 
 interface SelectWalletModalProps {
     show: boolean
-    select: (wallet: IWalletDoc) => void
+    select: (wallet: IWalletDoc | null) => void
+    withTotal?: boolean
 }
 
-const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select }) => {
+const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select, withTotal }) => {
     const { selectWalletModal } = useModal()
     const { wallets, isSuccess } = useWallet()
 
@@ -29,6 +30,30 @@ const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select }) =
                 </header>
 
                 <ul className="mt-5 bg-white">
+                    {withTotal && (
+                        <li className="group hover:bg-gray-400">
+                            <button
+                                onClick={() => {
+                                    select(null)
+                                    selectWalletModal.close()
+                                }}
+                                type="button"
+                                className="flex flex-row items-center w-full p-4"
+                            >
+                                <IoGlobeOutline className="w-8 h-8 group-hover:text-white" />
+
+                                <div className="flex flex-col items-start justify-center ml-4">
+                                    <div className="font-medium group-hover:text-white">Semua wallet</div>
+                                    <div className="text-gray-500 group-hover:text-white">
+                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(
+                                            wallets.reduce((acc, curr) => acc + curr.balance, 0)
+                                        )}
+                                    </div>
+                                </div>
+                            </button>
+                        </li>
+                    )}
+
                     {wallets.map((wallet) => (
                         <li className="group hover:bg-gray-400" key={wallet._id}>
                             <button

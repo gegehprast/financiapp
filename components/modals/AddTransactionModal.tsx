@@ -232,7 +232,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                                     if (e.target.value === '') {
                                         return
                                     }
-                                    
+
                                     setDate(new Date(e.target.value))
                                     setIsEditingDate(false)
                                 }}
@@ -278,9 +278,11 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                 <>
                     <SelectWalletModal
                         show={selectWalletModal.show}
-                        select={(wallet: IWalletDoc) => {
-                            setWallet(wallet)
-                            !category && categoryInputRef.current?.focus()
+                        select={(wallet: IWalletDoc | null) => {
+                            if (wallet) {
+                                setWallet(wallet)
+                                !category && categoryInputRef.current?.focus()
+                            }
                         }}
                     />
                     <SelectCategoryModal

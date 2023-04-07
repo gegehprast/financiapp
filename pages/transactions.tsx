@@ -62,9 +62,10 @@ const Transactions = () => {
 
             <SelectWalletModal
                 show={selectWalletModal.show}
-                select={(wallet: IWalletDoc) => {
+                select={(wallet: IWalletDoc | null) => {
                     setWallet(wallet)
                 }}
+                withTotal={true}
             />
         </main>
     )
