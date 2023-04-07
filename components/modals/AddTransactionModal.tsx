@@ -14,6 +14,7 @@ import { ICategoryDoc } from '@/models/Category'
 import SelectCategoryModal from './SelectCategoryModal'
 import axios from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import getDateText from '@/helpers/getDateText'
 
 interface AddTransactionModalProps {
     show: boolean
@@ -52,7 +53,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
     const [date, setDate] = React.useState(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
     const [error, setError] = React.useState<string>('')
     const [loading, setLoading] = React.useState<boolean>(false)
-    const [dateText, setDateText] = React.useState('Hari ini')
 
     const transactionsMutation = useMutation({
         mutationFn: postAddTransaction,
@@ -66,6 +66,8 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
             setError('Failed to add wallet.' + (error as Error).message)
         },
     })
+
+    const dateText = React.useMemo(() => getDateText(date), [date])
 
     const handleSaveTransaction: React.MouseEventHandler<HTMLButtonElement> = async () => {
         if (loading) {
@@ -97,22 +99,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
         setDate(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
         setNote('')
     }, [show])
-
-    React.useEffect(() => {
-        const d = new Date(date.getTime() - new Date().getTimezoneOffset() * 60000)
-        const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        const yesterday = new Date(Date.now() - new Date().getTimezoneOffset() * 60000 - 86400000)
-
-        console.log({ d, today, yesterday }, d.getFullYear(), today.getFullYear(), d.getMonth(), today.getMonth(), d.getDate(), today.getDate())
-        
-        if (d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate()) {
-            setDateText('Hari ini')
-        } else if (d.getFullYear() === yesterday.getFullYear() && d.getMonth() === yesterday.getMonth() && d.getDate() === yesterday.getDate()) {
-            setDateText('Kemarin')
-        } else {
-            setDateText(d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))
-        }
-    }, [date])
 
     React.useEffect(() => {
         if (isEditingDate) {

@@ -1,5 +1,6 @@
 import Icon from '@/components/Icon'
 import { useModal } from '@/contexts/ModalContext'
+import getDateText from '@/helpers/getDateText'
 import useAuth from '@/hooks/useAuth'
 import useTransaction from '@/hooks/useTransaction'
 import useWallet from '@/hooks/useWallet'
@@ -86,12 +87,7 @@ export default function Home() {
                                         <Icon icon={transaction.category.icon} className="w-6 h-6" />
                                         <div className="flex flex-col ml-3">
                                             <div className="font-medium">{transaction.category.name}</div>
-                                            <div className="text-sm text-gray-500 group-hover:text-white">
-                                                {transaction.date.toLocaleString('id-ID', {
-                                                    dateStyle: 'full',
-                                                    timeZone: 'Asia/Jakarta',
-                                                })}
-                                            </div>
+                                            <div className="text-sm text-gray-500 group-hover:text-white">{getDateText(transaction.date)}</div>
                                         </div>
                                     </div>
 
