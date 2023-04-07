@@ -26,6 +26,14 @@ async function index(req: NextApiRequest, res: NextApiResponse<MessageResponse |
                 $gte: new Date(req.query.startDate as string).setUTCHours(0, 0, 0, 0),
                 $lte: new Date(req.query.endDate as string).setUTCHours(23, 59, 59, 999),
             }
+        } else if (req.query.startDate) {
+            filter.date = {
+                $gte: new Date(req.query.startDate as string).setUTCHours(0, 0, 0, 0),
+            }
+        } else if (req.query.endDate) {
+            filter.date = {
+                $lte: new Date(req.query.endDate as string).setUTCHours(23, 59, 59, 999),
+            }
         }
 
         const transactions = await Transaction.find(filter)
