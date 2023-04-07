@@ -10,7 +10,6 @@ export default function useCategory() {
     const [categories, setCategories] = React.useState<ICategoryDoc[]>(data)
 
     React.useEffect(() => {
-        console.log(data)
         setCategories(data)
     }, [data])
 
