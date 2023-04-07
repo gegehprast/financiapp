@@ -43,7 +43,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
     const walletInputRef = React.useRef<HTMLInputElement>(null)
     const categoryInputRef = React.useRef<HTMLInputElement>(null)
     const dateInputRef = React.useRef<HTMLInputElement>(null)
-    const dateTextInputRef = React.useRef<HTMLInputElement>(null)
     const [amount, setAmount] = React.useState('')
     const [isEditingAmount, setIsEditingAmount] = React.useState(false)
     const [isEditingDate, setIsEditingDate] = React.useState(false)
@@ -264,7 +263,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
 
                         {!isEditingDate && (
                             <input
-                                ref={dateTextInputRef}
                                 type="text"
                                 value={dateText}
                                 onClick={() => setIsEditingDate(true)}
@@ -303,7 +301,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                         show={selectCategoryModal.show}
                         select={(category: ICategoryDoc) => {
                             setCategory(category)
-                            dateTextInputRef.current?.click()
                         }}
                     />
                 </>
