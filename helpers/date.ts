@@ -1,4 +1,4 @@
-import { endOfWeek, startOfWeek, sub } from "date-fns"
+import { endOfMonth, endOfWeek, startOfMonth, startOfWeek, sub } from "date-fns"
 
 export const getDateText = (date: Date) => {
     const d = new Date(date)
@@ -28,4 +28,12 @@ export const isLastWeek = (date: Date) => {
     const end = endOfWeek(day, { weekStartsOn: 1 })
 
     return date >= startOfWeek(start, { weekStartsOn: 1 }) && date <= endOfWeek(end, { weekStartsOn: 1 })
+}
+
+export const isLastMonth = (date: Date) => {
+    const day = sub(new Date(), { months: 1 })
+    const start = startOfMonth(day)
+    const end = endOfMonth(day)
+    
+    return date >= startOfMonth(start) && date <= endOfMonth(end)
 }
