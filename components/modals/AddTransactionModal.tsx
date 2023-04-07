@@ -43,14 +43,17 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
     const walletInputRef = React.useRef<HTMLInputElement>(null)
     const categoryInputRef = React.useRef<HTMLInputElement>(null)
     const dateInputRef = React.useRef<HTMLInputElement>(null)
+    const dateTextInputRef = React.useRef<HTMLInputElement>(null)
     const [amount, setAmount] = React.useState('')
     const [isEditingAmount, setIsEditingAmount] = React.useState(false)
+    const [isEditingDate, setIsEditingDate] = React.useState(false)
     const [wallet, setWallet] = React.useState<IWalletDoc>()
     const [category, setCategory] = React.useState<ICategoryDoc>()
     const [note, setNote] = React.useState('')
     const [date, setDate] = React.useState(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
     const [error, setError] = React.useState<string>('')
     const [loading, setLoading] = React.useState<boolean>(false)
+    const [dateText, setDateText] = React.useState('Hari ini')
 
     const transactionsMutation = useMutation({
         mutationFn: postAddTransaction,
@@ -87,12 +90,51 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
             amountInputRef.current?.focus()
         }
 
+        setIsEditingAmount(false)
+        setIsEditingDate(false)
         setAmount('')
         setWallet(undefined)
         setCategory(undefined)
         setDate(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
         setNote('')
     }, [show])
+
+    React.useEffect(() => {
+        const d = new Date(date.getTime() - new Date().getTimezoneOffset() * 60000)
+        const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        const yesterday = new Date(Date.now() - new Date().getTimezoneOffset() * 60000 - 86400000)
+
+        console.log({ d, today, yesterday }, d.getFullYear(), today.getFullYear(), d.getMonth(), today.getMonth(), d.getDate(), today.getDate())
+        
+        if (d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate()) {
+            setDateText('Hari ini')
+        } else if (d.getFullYear() === yesterday.getFullYear() && d.getMonth() === yesterday.getMonth() && d.getDate() === yesterday.getDate()) {
+            setDateText('Kemarin')
+        } else {
+            setDateText(d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))
+        }
+    }, [date])
+
+    React.useEffect(() => {
+        if (isEditingDate) {
+            setTimeout(() => {
+                dateInputRef.current?.showPicker()
+            }, 100)
+        }
+    }, [isEditingDate])
+
+    // detect click on document
+    React.useEffect(() => {
+        const handleClick = () => {
+            setIsEditingDate(false)
+        }
+
+        document.addEventListener('click', handleClick)
+
+        return () => {
+            document.removeEventListener('click', handleClick)
+        }
+    }, [])
 
     return (
         <div
@@ -195,14 +237,43 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
 
                     <div className="flex flex-row items-center w-full mt-4">
                         <IoCalendarOutline className="w-8 h-8" />
-                        <input
-                            ref={dateInputRef}
-                            type="date"
-                            value={date.toISOString().split('T')[0]}
-                            onChange={(e) => setDate(new Date(e.target.value))}
-                            placeholder="Pilih kategori"
-                            className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
-                        />
+
+                        {isEditingDate && (
+                            <input
+                                ref={dateInputRef}
+                                type="date"
+                                value={date.toISOString().split('T')[0]}
+                                onChange={(e) => {
+                                    if (e.target.value === '') {
+                                        return
+                                    }
+                                    
+                                    setDate(new Date(e.target.value))
+                                    setIsEditingDate(false)
+                                }}
+                                onBlur={() => setIsEditingDate(false)}
+                                onInput={() => setIsEditingDate(false)}
+                                onSelect={() => setIsEditingDate(false)}
+                                placeholder="Pilih kategori"
+                                className={`w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2 ${
+                                    !isEditingDate && 'hidden'
+                                }`}
+                                required
+                            />
+                        )}
+
+                        {!isEditingDate && (
+                            <input
+                                ref={dateTextInputRef}
+                                type="text"
+                                value={dateText}
+                                onClick={() => setIsEditingDate(true)}
+                                onFocus={() => setIsEditingDate(true)}
+                                placeholder="Pilih kategori"
+                                className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
+                                readOnly
+                            />
+                        )}
                     </div>
 
                     <div className="flex flex-row items-center w-full mt-4">
@@ -232,7 +303,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                         show={selectCategoryModal.show}
                         select={(category: ICategoryDoc) => {
                             setCategory(category)
-                            dateInputRef.current?.showPicker()
+                            dateTextInputRef.current?.click()
                         }}
                     />
                 </>
