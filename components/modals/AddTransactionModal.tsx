@@ -1,20 +1,13 @@
 import { useModal } from '@/contexts/ModalContext'
 import React from 'react'
-import {
-    IoAppsOutline,
-    IoCalendarOutline,
-    IoCashOutline,
-    IoCloseOutline,
-    IoDocumentTextOutline,
-    IoWalletOutline,
-} from 'react-icons/io5'
+import { IoAppsOutline, IoCalendarOutline, IoCashOutline, IoCloseOutline, IoDocumentTextOutline, IoWalletOutline } from 'react-icons/io5'
 import SelectWalletModal from './SelectWalletModal'
 import { IWalletDoc } from '@/models/Wallet'
 import { ICategoryDoc } from '@/models/Category'
 import SelectCategoryModal from './SelectCategoryModal'
 import axios from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import getDateText from '@/helpers/getDateText'
+import { getDateText } from '@/helpers/date'
 
 interface AddTransactionModalProps {
     show: boolean

@@ -1,6 +1,6 @@
 import Icon from '@/components/Icon'
 import { useModal } from '@/contexts/ModalContext'
-import getDateText from '@/helpers/getDateText'
+import { getDateText } from '@/helpers/date'
 import useAuth from '@/hooks/useAuth'
 import useTransaction from '@/hooks/useTransaction'
 import useWallet from '@/hooks/useWallet'
