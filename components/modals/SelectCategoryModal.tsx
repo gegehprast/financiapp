@@ -30,7 +30,7 @@ const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select 
                     <h1 className="ml-6 text-lg font-semibold">Pilih Kategori</h1>
                 </header>
 
-                <section className="mt-5 bg-white">
+                <section className="h-full mt-5 overflow-auto bg-white">
                     <div className="p-4">
                         <div className="flex flex-row items-center justify-around p-1 bg-gray-300 rounded">
                             <button
