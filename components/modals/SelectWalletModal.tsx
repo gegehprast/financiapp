@@ -21,7 +21,7 @@ const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select, wit
             }`}
         >
             <div className="w-full h-full mx-auto bg-gray-200 lg:w-1/2 xl:w-1/4">
-                <header className="flex flex-row items-center p-4 bg-white">
+                <header className="flex flex-row items-center p-4 bg-white h-[3rem]">
                     <button type="button" onClick={selectWalletModal.close}>
                         <IoArrowBackOutline className="w-6 h-6" />
                     </button>

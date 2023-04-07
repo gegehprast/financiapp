@@ -11,14 +11,14 @@ const Categories = () => {
 
     return (
         <main>
-            <header className="flex flex-row items-center p-4 bg-white">
+            <header className="flex flex-row items-center p-4 bg-white h-[3rem]">
                 <button type="button" onClick={() => Router.back()}>
                     <IoArrowBackOutline className="w-6 h-6" />
                 </button>
 
                 <h1 className="ml-6 text-lg font-semibold">Categories</h1>
             </header>
-            
+
             <section className="mt-5 bg-white">
                 <div className="p-4">
                     <div className="flex flex-row items-center justify-around p-1 bg-gray-300 rounded">

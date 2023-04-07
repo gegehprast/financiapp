@@ -12,7 +12,7 @@ const Wallets = () => {
 
     return (
         <main className="relative">
-            <header className="flex flex-row items-center p-4 bg-white">
+            <header className="flex flex-row items-center p-4 bg-white h-[3rem]">
                 <button type="button" onClick={() => Router.back()}>
                     <IoArrowBackOutline className="w-6 h-6" />
                 </button>

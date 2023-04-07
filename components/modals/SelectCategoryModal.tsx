@@ -17,12 +17,12 @@ const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select 
 
     return (
         <div
-            className={`fixed w-screen left-0 top-0 h-[calc(100vh-4rem)] transition-transform duration-300 ease-in-out ${
+            className={`fixed w-screen left-0 top-0 h-[calc(100vh-4rem)] transition-transform duration-300 ease-in-out overflow-hidden ${
                 show ? 'translate-y-0' : 'translate-y-[calc(100%+4rem)]'
             }`}
         >
             <div className="w-full h-full mx-auto bg-gray-200 lg:w-1/2 xl:w-1/4">
-                <header className="flex flex-row items-center p-4 bg-white">
+                <header className="flex flex-row items-center p-4 bg-white h-[3rem]">
                     <button type="button" onClick={selectCategoryModal.close}>
                         <IoArrowBackOutline className="w-6 h-6" />
                     </button>
@@ -30,12 +30,12 @@ const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select 
                     <h1 className="ml-6 text-lg font-semibold">Pilih Kategori</h1>
                 </header>
 
-                <section className="h-full mt-5 overflow-auto bg-white">
-                    <div className="p-4">
+                <section className="mt-5 bg-white h-[calc(100vh-3rem)]">
+                    <div className="p-2 h-[3rem]">
                         <div className="flex flex-row items-center justify-around p-1 bg-gray-300 rounded">
                             <button
                                 type="button"
-                                className={`w-1/2 p-1 text-center rounded ${
+                                className={`w-1/2 text-center rounded ${
                                     type === 'expense' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
                                 }`}
                                 onClick={() => setType('expense')}
@@ -44,7 +44,7 @@ const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select 
                             </button>
                             <button
                                 type="button"
-                                className={`w-1/2 p-1 text-center rounded ${
+                                className={`w-1/2 text-center rounded ${
                                     type === 'income' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
                                 }`}
                                 onClick={() => setType('income')}
@@ -57,7 +57,7 @@ const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select 
                     {isLoading ? (
                         <div>Memuat...</div>
                     ) : (
-                        <ul>
+                        <ul className="flex flex-col h-[calc(100vh-4rem-3rem-3rem-1.25rem)] overflow-auto">
                             {categories
                                 .filter((category) => category.type === type)
                                 .map((category) => (

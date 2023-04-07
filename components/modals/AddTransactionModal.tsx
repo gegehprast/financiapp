@@ -116,12 +116,12 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
 
     return (
         <div
-            className={`fixed w-screen left-0 top-0 h-[calc(100vh-4rem)] transition-transform duration-300 ease-in-out ${
+            className={`fixed w-screen left-0 top-0 h-[calc(100vh-4rem)] transition-transform duration-300 ease-in-out overflow-hidden ${
                 show ? 'translate-y-0' : 'translate-y-[calc(100%+4rem)]'
             }`}
         >
             <div className="w-full h-full mx-auto bg-gray-200 lg:w-1/2 xl:w-1/4">
-                <header className="flex flex-row items-center justify-between p-4 bg-white">
+                <header className="flex flex-row items-center justify-between p-4 bg-white h-[3rem]">
                     <div className="flex flex-row items-center">
                         <button type="button" onClick={addTransactionModal.close}>
                             <IoCloseOutline className="w-6 h-6" />
