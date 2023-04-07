@@ -2,7 +2,7 @@ import { useModal } from '@/contexts/ModalContext'
 import useWallet from '@/hooks/useWallet'
 import { IWalletDoc } from '@/models/Wallet'
 import React from 'react'
-import { IoArrowBackOutline, IoCardOutline, IoCashOutline, IoCloseOutline, IoGlobeOutline } from 'react-icons/io5'
+import { IoArrowBackOutline, IoCardOutline, IoCashOutline, IoGlobeOutline } from 'react-icons/io5'
 
 interface SelectWalletModalProps {
     show: boolean
@@ -12,7 +12,7 @@ interface SelectWalletModalProps {
 
 const SelectWalletModal: React.FC<SelectWalletModalProps> = ({ show, select, withTotal }) => {
     const { selectWalletModal } = useModal()
-    const { wallets, isSuccess } = useWallet()
+    const { wallets } = useWallet()
 
     return (
         <div
