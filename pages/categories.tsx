@@ -24,7 +24,7 @@ const Categories = () => {
                     <div className="flex flex-row items-center justify-around p-1 bg-gray-300 rounded">
                         <button
                             type="button"
-                            className={`w-1/2 p-1 text-center rounded ${
+                            className={`w-1/2 text-center rounded ${
                                 type === 'expense' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
                             }`}
                             onClick={() => setType('expense')}
@@ -33,7 +33,7 @@ const Categories = () => {
                         </button>
                         <button
                             type="button"
-                            className={`w-1/2 p-1 text-center rounded ${
+                            className={`w-1/2 text-center rounded ${
                                 type === 'income' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
                             }`}
                             onClick={() => setType('income')}
