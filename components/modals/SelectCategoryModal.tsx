@@ -4,16 +4,22 @@ import React from 'react'
 import { IoArrowBackOutline } from 'react-icons/io5'
 import Icon from '../Icon'
 import useCategory from '@/hooks/useCategory'
+import Tab from '../Tab'
 
 interface SelectCategoryModalProps {
     show: boolean
     select: (wallet: ICategoryDoc) => void
 }
 
+const typeTabItems = [
+    { name: 'Pengeluaran', id: 'expense' },
+    { name: 'Pemasukan', id: 'income' },
+]
+
 const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select }) => {
     const { selectCategoryModal } = useModal()
     const { categories, isLoading } = useCategory()
-    const [type, setType] = React.useState<'expense' | 'income'>('expense')
+    const [type, setType] = React.useState<typeof typeTabItems[number]>(typeTabItems[0])
 
     return (
         <div
@@ -32,26 +38,7 @@ const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select 
 
                 <section className="mt-5 bg-white h-[calc(100vh-3rem)]">
                     <div className="p-2 h-[3rem]">
-                        <div className="flex flex-row items-center justify-around p-1 bg-gray-300 rounded">
-                            <button
-                                type="button"
-                                className={`w-1/2 text-center rounded ${
-                                    type === 'expense' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
-                                }`}
-                                onClick={() => setType('expense')}
-                            >
-                                Pengeluaran
-                            </button>
-                            <button
-                                type="button"
-                                className={`w-1/2 text-center rounded ${
-                                    type === 'income' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
-                                }`}
-                                onClick={() => setType('income')}
-                            >
-                                Pemasukan
-                            </button>
-                        </div>
+                        <Tab items={typeTabItems} active={type} setActive={(type) => setType(type)} />
                     </div>
 
                     {isLoading ? (
@@ -59,7 +46,7 @@ const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select 
                     ) : (
                         <ul className="flex flex-col h-[calc(100vh-4rem-3rem-3rem-1.25rem)] overflow-auto">
                             {categories
-                                .filter((category) => category.type === type)
+                                .filter((category) => category.type === type.id)
                                 .map((category) => (
                                     <li key={category._id} className="border-t group hover:bg-gray-400">
                                         <button

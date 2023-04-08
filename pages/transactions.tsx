@@ -1,4 +1,5 @@
 import Icon from '@/components/Icon'
+import Tab from '@/components/Tab'
 import SelectWalletModal from '@/components/modals/SelectWalletModal'
 import { useModal } from '@/contexts/ModalContext'
 import { getDateText, isLastMonth, isLastWeek } from '@/helpers/date'
@@ -56,13 +57,18 @@ const ranges = {
     })),
 }
 
+const rangeTypeTabItems = [
+    { name: 'Mingguan', id: 'weeks' },
+    { name: 'Bulanan', id: 'months' },
+]
+
 const Transactions = () => {
     const { selectWalletModal } = useModal()
     const { wallets } = useWallet()
     const [wallet, setWallet] = React.useState<IWalletDoc | null>(null)
-    const [rangeType, setRangeType] = React.useState<keyof typeof ranges>('weeks')
+    const [rangeType, setRangeType] = React.useState<typeof rangeTypeTabItems[number]>(rangeTypeTabItems[0])
     const [currentRange, setCurrentRange] = React.useState<typeof future | typeof ranges[keyof typeof ranges][number]>(
-        ranges[rangeType][ranges[rangeType].length - 1]
+        ranges[rangeType.id as keyof typeof ranges][ranges[rangeType.id as keyof typeof ranges].length - 1]
     )
     const { transactions } = useTransaction({
         query: {
@@ -74,7 +80,7 @@ const Transactions = () => {
     const rangeRef = React.useRef<HTMLDivElement>(null)
 
     React.useEffect(() => {
-        setCurrentRange(ranges[rangeType][ranges[rangeType].length - 1])
+        setCurrentRange(ranges[rangeType.id as keyof typeof ranges][ranges[rangeType.id as keyof typeof ranges].length - 1])
 
         if (rangeRef.current) {
             rangeRef.current.scrollLeft = rangeRef.current.scrollWidth
@@ -101,30 +107,11 @@ const Transactions = () => {
                 </div>
 
                 <div className="px-4 mt-4">
-                    <div className="flex flex-row items-center justify-around p-1 bg-gray-300 rounded">
-                        <button
-                            type="button"
-                            className={`w-1/2 text-center rounded ${
-                                rangeType === 'weeks' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
-                            }`}
-                            onClick={() => setRangeType('weeks')}
-                        >
-                            Mingguan
-                        </button>
-                        <button
-                            type="button"
-                            className={`w-1/2 text-center rounded ${
-                                rangeType === 'months' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
-                            }`}
-                            onClick={() => setRangeType('months')}
-                        >
-                            Bulanan
-                        </button>
-                    </div>
+                    <Tab items={rangeTypeTabItems} active={rangeType} setActive={(type) => setRangeType(type)} />
                 </div>
 
                 <div ref={rangeRef} className="flex flex-row w-full mt-1 overflow-x-auto">
-                    {ranges[rangeType].map((range, index) => (
+                    {ranges[rangeType.id as keyof typeof ranges].map((range, index) => (
                         <button
                             key={index}
                             type="button"

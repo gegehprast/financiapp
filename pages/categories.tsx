@@ -1,13 +1,19 @@
 import Icon from '@/components/Icon'
+import Tab from '@/components/Tab'
 import useCategory from '@/hooks/useCategory'
 import Link from 'next/link'
 import Router from 'next/router'
 import React from 'react'
 import { IoArrowBackOutline } from 'react-icons/io5'
 
+const typeTabItems = [
+    { name: 'Pengeluaran', id: 'expense' },
+    { name: 'Pemasukan', id: 'income' },
+]
+
 const Categories = () => {
     const { categories, isLoading } = useCategory()
-    const [type, setType] = React.useState<'expense' | 'income'>('expense')
+    const [type, setType] = React.useState<typeof typeTabItems[number]>(typeTabItems[0])
 
     return (
         <main>
@@ -21,26 +27,7 @@ const Categories = () => {
 
             <section className="mt-5 bg-white">
                 <div className="p-4">
-                    <div className="flex flex-row items-center justify-around p-1 bg-gray-300 rounded">
-                        <button
-                            type="button"
-                            className={`w-1/2 text-center rounded ${
-                                type === 'expense' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
-                            }`}
-                            onClick={() => setType('expense')}
-                        >
-                            Pengeluaran
-                        </button>
-                        <button
-                            type="button"
-                            className={`w-1/2 text-center rounded ${
-                                type === 'income' ? 'bg-white ' : 'text-gray-600 hover:bg-white hover:text-black'
-                            }`}
-                            onClick={() => setType('income')}
-                        >
-                            Pemasukan
-                        </button>
-                    </div>
+                    <Tab items={typeTabItems} active={type} setActive={(type) => setType(type)} />
                 </div>
 
                 {isLoading ? (
@@ -48,7 +35,7 @@ const Categories = () => {
                 ) : (
                     <ul>
                         {categories
-                            .filter((category) => category.type === type)
+                            .filter((category) => category.type === type.id)
                             .map((category) => (
                                 <li key={category._id} className="border-t group hover:bg-gray-400">
                                     <Link href={'/wallets'} className="flex flex-row items-center p-2 font-medium group-hover:text-white">
