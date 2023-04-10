@@ -176,7 +176,7 @@ const Transactions = () => {
                     <div className="flex flex-row items-center justify-between p-2 px-4 bg-gray-50">
                         <div className="font-medium">{getDateText(groupedTransaction.date)}</div>
 
-                        <div className={`font-medium ${groupedTransaction.total < 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                        <div className={`text-sm ${groupedTransaction.total < 0 ? 'text-red-500' : 'text-blue-500'}`}>
                             {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(groupedTransaction.total)}
                         </div>
                     </div>
@@ -189,14 +189,14 @@ const Transactions = () => {
                                         <div className="flex flex-row items-center">
                                             <Icon icon={transaction.category.icon} className="w-7 h-7" />
                                             <div className="flex flex-col ml-3">
-                                                <div className="font-medium">{transaction.category.name}</div>
+                                                <div>{transaction.category.name}</div>
                                                 <div className="min-h-[0.75rem] text-sm text-gray-500 group-hover:text-white">
                                                     {transaction.notes}
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className={`font-medium ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
+                                        <div className={`text-sm ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
                                             {transaction.category.type === 'expense' ? '-' : ''}
                                             {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(transaction.amount)}
                                         </div>
