@@ -4,7 +4,7 @@ import useWallet from '@/hooks/useWallet'
 import Link from 'next/link'
 import Router from 'next/router'
 import React from 'react'
-import { IoAddCircle, IoArrowBackOutline, IoCardOutline, IoCashOutline } from 'react-icons/io5'
+import { IoAddCircle, IoArrowBackOutline, IoCardOutline, IoWalletOutline } from 'react-icons/io5'
 
 const Wallets = () => {
     const { wallets, isSuccess } = useWallet()
@@ -28,7 +28,7 @@ const Wallets = () => {
                         <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
                             <div className="flex flex-row items-center">
                                 {wallet.type === 'cash' ? (
-                                    <IoCashOutline className="w-8 h-8 group-hover:text-white" />
+                                    <IoWalletOutline className="w-8 h-8 group-hover:text-white" />
                                 ) : (
                                     <IoCardOutline className="w-8 h-8 group-hover:text-white" />
                                 )}

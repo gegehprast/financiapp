@@ -2,7 +2,7 @@ import { useModal } from '@/contexts/ModalContext'
 import useWallet from '@/hooks/useWallet'
 import { IWalletDoc } from '@/models/Wallet'
 import React from 'react'
-import { IoArrowBackOutline, IoCardOutline, IoCashOutline, IoGlobeOutline, IoWalletOutline } from 'react-icons/io5'
+import { IoArrowBackOutline, IoCardOutline, IoGlobeOutline, IoWalletOutline } from 'react-icons/io5'
 
 interface SelectWalletModalProps {
     show: boolean
