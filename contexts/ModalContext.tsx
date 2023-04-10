@@ -27,6 +27,7 @@ export const ModalProvider: React.FC<{ children: JSX.Element }> = ({ children })
         setShowAddWalletModal(false)
         setShowAddTransactionModal(false)
         setShowSelectWalletModal(false)
+        setShowSelectCategoryModal(false)
     }, [router])
 
     return (
