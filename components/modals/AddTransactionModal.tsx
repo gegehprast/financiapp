@@ -17,7 +17,7 @@ interface IPostAddTransaction {
     amount: number
     walletId: string
     categoryId: string
-    note: string
+    notes: string
     date: Date
 }
 
@@ -26,7 +26,7 @@ const postAddTransaction = (data: IPostAddTransaction): Promise<IWalletDoc> =>
         amount: data.amount,
         walletId: data.walletId,
         categoryId: data.categoryId,
-        note: data.note,
+        notes: data.notes,
         date: data.date,
     })
 
@@ -42,7 +42,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
     const [isEditingDate, setIsEditingDate] = React.useState(false)
     const [wallet, setWallet] = React.useState<IWalletDoc>()
     const [category, setCategory] = React.useState<ICategoryDoc>()
-    const [note, setNote] = React.useState('')
+    const [notes, setNotes] = React.useState('')
     const [date, setDate] = React.useState(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
     const [error, setError] = React.useState<string>('')
     const [loading, setLoading] = React.useState<boolean>(false)
@@ -74,7 +74,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
             amount: parseFloat(amount),
             walletId: wallet?._id,
             categoryId: category?._id,
-            note,
+            notes,
             date,
         })
     }
@@ -90,7 +90,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
         setWallet(undefined)
         setCategory(undefined)
         setDate(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
-        setNote('')
+        setNotes('')
     }, [show])
 
     React.useEffect(() => {
@@ -256,10 +256,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                     <div className="flex flex-row items-center w-full mt-4">
                         <IoDocumentTextOutline className="w-8 h-8" />
                         <textarea
-                            value={note}
+                            value={notes}
                             placeholder="Tulis catatan"
                             rows={3}
-                            onChange={(e) => setNote(e.target.value)}
+                            onChange={(e) => setNotes(e.target.value)}
                             className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
                         />
                     </div>
