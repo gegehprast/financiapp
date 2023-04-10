@@ -20,7 +20,7 @@ import {
 } from 'date-fns'
 import Link from 'next/link'
 import React from 'react'
-import { IoChevronDown } from 'react-icons/io5'
+import { IoCalendar, IoChevronDown } from 'react-icons/io5'
 
 const future = { start: add(new Date(), { days: 1 }), end: null, label: 'Masa depan' }
 const ranges = {
@@ -70,7 +70,7 @@ const Transactions = () => {
     const [currentRange, setCurrentRange] = React.useState<typeof future | typeof ranges[keyof typeof ranges][number]>(
         ranges[rangeType.id as keyof typeof ranges][ranges[rangeType.id as keyof typeof ranges].length - 1]
     )
-    const { transactions } = useTransaction({
+    const { transactions, groupedTransactions } = useTransaction({
         query: {
             walletId: wallet ? wallet._id : '',
             startDate: format(currentRange.start, 'yyyy-MM-dd'),
@@ -171,31 +171,42 @@ const Transactions = () => {
                 </div>
             </section>
 
-            <section className="flex flex-col mt-5 bg-white">
-                <ul>
-                    {transactions.map((transaction) => (
-                        <li key={transaction._id} className="group hover:bg-gray-400">
-                            <Link href={'/wallet'} className="flex flex-col px-3 pb-2">
-                                <div className="w-full border-t group-hover:border-gray-400"></div>
-                                <div className="flex flex-row items-center justify-between mt-2">
-                                    <div className="flex flex-row items-center mt-2">
-                                        <Icon icon={transaction.category.icon} className="w-6 h-6" />
-                                        <div className="flex flex-col ml-3">
-                                            <div className="font-medium">{transaction.category.name}</div>
-                                            <div className="text-sm text-gray-500 group-hover:text-white">{getDateText(transaction.date)}</div>
+            {groupedTransactions.map((groupedTransaction) => (
+                <section key={groupedTransaction.date.getHours()} className="flex flex-col mt-5 bg-white">
+                    <div className="flex flex-row items-center justify-between p-2 px-4 bg-gray-50">
+                        <div className="font-medium">{getDateText(groupedTransaction.date)}</div>
+
+                        <div className={`font-medium ${groupedTransaction.total < 0 ? 'text-red-500' : 'text-blue-500'}`}>
+                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(groupedTransaction.total)}
+                        </div>
+                    </div>
+
+                    <ul>
+                        {groupedTransaction.transactions.map((transaction) => (
+                            <li key={transaction._id} className="group hover:bg-gray-400">
+                                <Link href={'/wallet'} className="flex flex-col px-2">
+                                    <div className="flex flex-row items-center justify-between p-2 py-3 border-t group-hover:border-t-gray-400">
+                                        <div className="flex flex-row items-center">
+                                            <Icon icon={transaction.category.icon} className="w-7 h-7" />
+                                            <div className="flex flex-col ml-3">
+                                                <div className="font-medium">{transaction.category.name}</div>
+                                                <div className="min-h-[0.75rem] text-sm text-gray-500 group-hover:text-white">
+                                                    {transaction.notes}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={`font-medium ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
+                                            {transaction.category.type === 'expense' ? '-' : ''}
+                                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(transaction.amount)}
                                         </div>
                                     </div>
-
-                                    <div className={`font-medium ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
-                                        {transaction.category.type === 'expense' ? '-' : ''}
-                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(transaction.amount)}
-                                    </div>
-                                </div>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </section>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            ))}
 
             <SelectWalletModal
                 show={selectWalletModal.show}

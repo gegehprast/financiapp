@@ -2,6 +2,7 @@ import React from 'react'
 import { MutationFunction, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { IPopulatedTransactionDoc, ITransactionDoc } from '@/models/Transaction'
+import { format } from 'date-fns'
 
 export interface IGetTransactionsQuery {
     limit?: number
@@ -13,6 +14,12 @@ export interface IGetTransactionsQuery {
 export interface IUseTransactionProps {
     mutationFn?: MutationFunction
     query: IGetTransactionsQuery
+}
+
+export interface GroupedTransactions {
+    date: Date
+    total: number
+    transactions: IPopulatedTransactionDoc[]
 }
 
 const getTransactions = (query: IGetTransactionsQuery): Promise<IPopulatedTransactionDoc[]> =>
@@ -31,6 +38,7 @@ export default function useTransaction({ mutationFn, query }: IUseTransactionPro
         initialData: [],
     })
     const [transactions, setTransactions] = React.useState<IPopulatedTransactionDoc[]>(data)
+    const [groupedTransactions, setGroupedTransactions] = React.useState<GroupedTransactions[]>([])
 
     const mutation = useMutation({
         mutationFn: mutationFn,
@@ -50,8 +58,29 @@ export default function useTransaction({ mutationFn, query }: IUseTransactionPro
             }
         })
 
+        // group transactions by date
+        const grouped = trans.reduce((acc, cur) => {
+            const date = format(cur.date, 'yyyy-MM-dd')
+            if (!acc[date]) {
+                acc[date] = []
+            }
+            acc[date].push(cur)
+            return acc
+        }, {} as { [key: string]: IPopulatedTransactionDoc[] })
+
+        // convert grouped transactions to array
+        const groupedArr = Object.keys(grouped).map((key) => {
+            return {
+                date: new Date(key),
+                total: grouped[key].reduce((acc, cur) => (cur.category.type === 'expense' ? acc - cur.amount : acc + cur.amount), 0),
+                transactions: grouped[key],
+            }
+        })
+        
+        setGroupedTransactions(groupedArr)
+
         setTransactions(trans)
     }, [data])
 
-    return { transactions, isLoading, isSuccess, mutation }
+    return { transactions, groupedTransactions, isLoading, isSuccess, mutation }
 }
