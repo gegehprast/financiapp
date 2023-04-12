@@ -48,23 +48,8 @@ const Account = () => {
                     </Link>
                 </li>
 
-                <li className="group hover:bg-gray-500">
-                    <Link href={'/bills'} className="flex flex-row items-center justify-between p-4">
-                        <div className="flex flex-row items-center">
-                            <div className="w-6 h-6">
-                                <ReceiptPercent />
-                            </div>
-                            <div className="ml-3 font-medium">Bills</div>
-                        </div>
-
-                        <div className="w-6 h-6">
-                            <ChevronRight />
-                        </div>
-                    </Link>
-                </li>
-
-                <li className="group hover:bg-gray-500">
-                    <button type="button" className="flex flex-row items-center justify-between p-4" onClick={handleLogout}>
+                <li className="cursor-pointer group hover:bg-gray-500" onClick={handleLogout}>
+                    <button type="button" className="flex flex-row items-center justify-between p-4">
                         <div className="flex flex-row items-center">
                             <div className="w-6 h-6">
                                 <ArrowRightOnRectangle />
