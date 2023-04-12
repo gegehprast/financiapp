@@ -172,7 +172,7 @@ const Transactions = () => {
             </section>
 
             {groupedTransactions.map((groupedTransaction) => (
-                <section key={groupedTransaction.date.getHours()} className="flex flex-col mt-5 bg-white">
+                <section key={groupedTransaction.date.getTime()} className="flex flex-col mt-5 bg-white">
                     <div className="flex flex-row items-center justify-between p-2 px-4 bg-gray-50">
                         <div className="font-medium">{getDateText(groupedTransaction.date)}</div>
 
