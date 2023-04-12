@@ -101,25 +101,6 @@ export default function Home() {
                     ))}
                 </ul>
             </section>
-
-            {/* spending report */}
-            <section className="flex flex-col p-3 mt-5 bg-white rounded-lg">
-                <div className="flex flex-row items-center justify-between">
-                    <h2 className="text-lg font-semibold">Spending Reports</h2>
-                    <Link href={'/reports'} className="font-medium text-green-400">
-                        See reports
-                    </Link>
-                </div>
-
-                <div className="h-[250px]"></div>
-
-                {/* top spending */}
-                <div className="flex flex-row items-center justify-between">
-                    <h2 className="font-semibold">Top Spending</h2>
-                </div>
-
-                <div className="h-[100px]"></div>
-            </section>
         </main>
     )
 }
