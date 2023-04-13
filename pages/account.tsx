@@ -39,7 +39,7 @@ const Account = () => {
                             <div className="w-6 h-6">
                                 <RectangleGroup />
                             </div>
-                            <div className="ml-3 font-medium">Categories</div>
+                            <div className="ml-3 font-medium">Kategori</div>
                         </div>
 
                         <div className="w-6 h-6">
@@ -54,7 +54,7 @@ const Account = () => {
                             <div className="w-6 h-6">
                                 <ArrowRightOnRectangle />
                             </div>
-                            <div className="ml-3 font-medium">Logout</div>
+                            <div className="ml-3 font-medium">Keluar</div>
                         </div>
                     </button>
                 </li>
