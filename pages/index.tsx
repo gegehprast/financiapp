@@ -1,15 +1,24 @@
 import Transaction from '@/components/Transaction'
+import { useEditingManager } from '@/contexts/EditingManagerContext'
 import { useModal } from '@/contexts/ModalContext'
 import useTransaction from '@/hooks/useTransaction'
 import useWallet from '@/hooks/useWallet'
+import { IWalletDoc } from '@/models/Wallet'
 import Link from 'next/link'
 import React from 'react'
 import { IoAddCircle, IoCardOutline, IoCashOutline } from 'react-icons/io5'
 
 export default function Home() {
     const { wallets, isSuccess } = useWallet()
-    const { addWalletModal } = useModal()
+    const { addWalletModal, editWalletModal } = useModal()
+    const { wallet: editingWallet } = useEditingManager()
     const { transactions } = useTransaction({ query: { limit: 3 } })
+
+    const handleStartEditWallet = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, wallet: IWalletDoc) => {
+        editingWallet.setCurrent(wallet)
+
+        editWalletModal.open()
+    }
 
     return (
         <main className="p-4">
@@ -46,21 +55,23 @@ export default function Home() {
 
                 <ul>
                     {wallets.map((wallet) => (
-                        <li key={wallet._id} className="group hover:bg-gray-400 hover:text-white">
-                            <Link href={'/wallet'} className="flex flex-col px-3 pb-3">
-                                <div className="w-full border-t group-hover:border-gray-400"></div>
+                        <li
+                            key={wallet._id}
+                            className="flex flex-col px-3 pb-3 cursor-pointer group hover:bg-gray-400 hover:text-white"
+                            onClick={(e) => handleStartEditWallet(e, wallet)}
+                        >
+                            <div className="w-full border-t group-hover:border-gray-400"></div>
 
-                                <div className="flex flex-row items-center justify-between mt-3">
-                                    <div className="flex flex-row items-center">
-                                        {wallet.type === 'cash' ? <IoCashOutline className="w-6 h-6" /> : <IoCardOutline className="w-6 h-6" />}
-                                        <div className="ml-3 font-medium">{wallet.name}</div>
-                                    </div>
-
-                                    <div className="font-medium">
-                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(wallet.balance)}
-                                    </div>
+                            <div className="flex flex-row items-center justify-between mt-3">
+                                <div className="flex flex-row items-center">
+                                    {wallet.type === 'cash' ? <IoCashOutline className="w-6 h-6" /> : <IoCardOutline className="w-6 h-6" />}
+                                    <div className="ml-3 font-medium">{wallet.name}</div>
                                 </div>
-                            </Link>
+
+                                <div className="font-medium">
+                                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(wallet.balance)}
+                                </div>
+                            </div>
                         </li>
                     ))}
                 </ul>
