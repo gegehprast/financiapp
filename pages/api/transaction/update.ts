@@ -1,15 +1,14 @@
 import withCORS from '@/middlewares/withCORS'
 import withDB from '@/middlewares/withDB'
-import methodPost from '@/middlewares/methodPost'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { MessageResponse } from '@/global'
 import authenticated from '@/middlewares/authenticated'
 import { sessionOptions } from '@/lib/session'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import Transaction, { ITransactionDoc } from '@/models/Transaction'
-import mongoose from 'mongoose'
 import Wallet from '@/models/Wallet'
 import Category from '@/models/Category'
+import methodPut from '@/middlewares/methodPut'
 
 async function update(req: NextApiRequest, res: NextApiResponse<MessageResponse | ITransactionDoc>) {
     try {
@@ -70,4 +69,4 @@ async function update(req: NextApiRequest, res: NextApiResponse<MessageResponse 
     }
 }
 
-export default withIronSessionApiRoute(withCORS(methodPost(authenticated(withDB(update)))), sessionOptions)
+export default withIronSessionApiRoute(withCORS(methodPut(authenticated(withDB(update)))), sessionOptions)
