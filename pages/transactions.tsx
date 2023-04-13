@@ -96,6 +96,16 @@ const Transactions = () => {
         }
     }, [rangeType])
 
+    React.useEffect(() => {
+        if (wallet) {
+            const newWallet = wallets.find((x) => x._id === wallet._id)
+
+            if (newWallet) {
+                setWallet(newWallet)
+            }
+        }
+    }, [wallet, wallets])
+
     return (
         <main>
             <section className="bg-white">

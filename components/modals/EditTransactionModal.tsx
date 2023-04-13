@@ -9,12 +9,14 @@ import axios from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDateText } from '@/helpers/date'
 import { useEditingManager } from '@/contexts/EditingManagerContext'
+import { ITransactionDoc } from '@/models/Transaction'
 
 interface EditTransactionModalProps {
     show: boolean
 }
 
-interface IPostAddTransaction {
+interface IPostUpdateTransaction {
+    transactionId: string
     amount: number
     walletId: string
     categoryId: string
@@ -22,13 +24,19 @@ interface IPostAddTransaction {
     date: Date
 }
 
-const postAddTransaction = (data: IPostAddTransaction): Promise<IWalletDoc> =>
-    axios.post('/api/transaction/store', {
+const postUpdateTransaction = (data: IPostUpdateTransaction): Promise<ITransactionDoc> =>
+    axios.post('/api/transaction/update', {
+        transactionId: data.transactionId,
         amount: data.amount,
         walletId: data.walletId,
         categoryId: data.categoryId,
         notes: data.notes,
         date: data.date,
+    })
+
+const postDeleteTransaction = (transactionId: string): Promise<ITransactionDoc> =>
+    axios.post('/api/transaction/delete', {
+        transactionId,
     })
 
 const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => {
@@ -50,7 +58,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => 
     const dateInputRef = React.useRef<HTMLInputElement>(null)
 
     const transactionsMutation = useMutation({
-        mutationFn: postAddTransaction,
+        mutationFn: postUpdateTransaction,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['transactions'] })
             queryClient.invalidateQueries({ queryKey: ['wallets'] })
@@ -58,7 +66,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => 
             editTransactionModal.close()
         },
         onError: (error) => {
-            setError('Failed to add wallet.' + (error as Error).message)
+            setError('Failed to update wallet.' + (error as Error).message)
         },
     })
 
@@ -72,17 +80,11 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => 
         setError('')
         setLoading(true)
 
-        transactionsMutation.mutate({
-            amount: parseFloat(amount),
-            walletId: wallet?._id,
-            categoryId: category?._id,
-            notes,
-            date,
-        })
+        // TODO: Delete transaction
     }
 
     const handleSaveTransaction: React.MouseEventHandler<HTMLButtonElement> = async () => {
-        if (loading) {
+        if (loading || !transaction.current) {
             return
         }
 
@@ -90,6 +92,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => 
         setLoading(true)
 
         transactionsMutation.mutate({
+            transactionId: transaction.current._id,
             amount: parseFloat(amount),
             walletId: wallet?._id,
             categoryId: category?._id,
