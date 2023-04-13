@@ -1,12 +1,10 @@
-import EllipsisVertical from '@/components/icons/EllipsisVertical'
 import { useEditingManager } from '@/contexts/EditingManagerContext'
 import { useModal } from '@/contexts/ModalContext'
 import useWallet from '@/hooks/useWallet'
 import { IWalletDoc } from '@/models/Wallet'
-import Link from 'next/link'
 import Router from 'next/router'
 import React from 'react'
-import { IoAddCircle, IoArrowBackOutline, IoCardOutline, IoWalletOutline } from 'react-icons/io5'
+import { IoAddCircle, IoArrowBackOutline, IoCardOutline, IoEllipsisVerticalOutline, IoWalletOutline } from 'react-icons/io5'
 
 const Wallets = () => {
     const { wallets, isSuccess } = useWallet()
@@ -53,8 +51,11 @@ const Wallets = () => {
                             </div>
                         </div>
 
-                        <div className="w-6 h-6">
-                            <EllipsisVertical />
+                        <div
+                            className="flex flex-row items-center p-2 rounded-full hover:bg-gray-500 group-hover:text-white"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <IoEllipsisVerticalOutline className="w-6 h-6" />
                         </div>
                     </li>
                 ))}
