@@ -19,44 +19,45 @@ async function update(req: NextApiRequest, res: NextApiResponse<MessageResponse 
             return res.status(404).json({ message: 'Transaction not found.' })
         }
 
+        const oldAmount = transaction.amount
+        const oldCategory = await Category.findOne({ _id: transaction.category })
         const oldWallet = await Wallet.findOne({ user: req.session.auth.user._id, _id: transaction.wallet })
-        const wallet = await Wallet.findOne({ user: req.session.auth.user._id, _id: req.body.walletId })
         const category = await Category.findOne({ _id: req.body.categoryId })
-        
+        const wallet = await Wallet.findOne({ user: req.session.auth.user._id, _id: req.body.walletId })
+
+        if (!oldCategory) {
+            return res.status(404).json({ message: 'Old category not found.' })
+        }
+
         if (!oldWallet) {
             return res.status(404).json({ message: 'Old wallet not found.' })
-        }
-        
-        if (!wallet) {
-            return res.status(404).json({ message: 'Wallet not found.' })
         }
 
         if (!category) {
             return res.status(404).json({ message: 'Category not found.' })
         }
-
-        const oldType = category.type
-        const oldAmount = transaction.amount
-
+        
+        if (!wallet) {
+            return res.status(404).json({ message: 'Wallet not found.' })
+        }
+        
         // save transaction
         transaction.amount = parseFloat(req.body.amount)
-        transaction.wallet = new mongoose.Types.ObjectId(req.body.walletId)
-        transaction.category = new mongoose.Types.ObjectId(req.body.categoryId)
+        transaction.wallet = wallet._id
+        transaction.category = category._id
         transaction.notes = req.body.notes
         transaction.date = new Date(req.body.date)
 
         await transaction.save()
 
-        // TODO: fix category changes
-
         // save wallets
         if (wallet.id === oldWallet.id) {
-            oldWallet.balance += oldType === 'income' ? -oldAmount : oldAmount
+            oldWallet.balance += oldCategory.type === 'income' ? -oldAmount : oldAmount
             oldWallet.balance += category.type === 'income' ? transaction.amount : -transaction.amount
 
             await oldWallet.save()
         } else {
-            oldWallet.balance += oldType === 'income' ? -oldAmount : oldAmount
+            oldWallet.balance += oldCategory.type === 'income' ? -oldAmount : oldAmount
             wallet.balance += category.type === 'income' ? transaction.amount : -transaction.amount
 
             await oldWallet.save()
