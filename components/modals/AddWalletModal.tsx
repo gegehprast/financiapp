@@ -111,7 +111,7 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
                                 }`}
                             >
                                 <input type="radio" value="virtual" checked={type === 'virtual'} onChange={(e) => setType(e.target.value)} />
-                                <div className="ml-2 ">Rekining / E-money</div>
+                                <div className="ml-2 ">Bank / E-money</div>
                             </label>
 
                             <label
