@@ -47,6 +47,8 @@ async function update(req: NextApiRequest, res: NextApiResponse<MessageResponse 
 
         await transaction.save()
 
+        // TODO: fix category changes
+
         // save wallets
         if (wallet.id === oldWallet.id) {
             oldWallet.balance += oldType === 'income' ? -oldAmount : oldAmount
