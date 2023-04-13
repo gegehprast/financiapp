@@ -22,7 +22,7 @@ import {
 } from 'date-fns'
 import Link from 'next/link'
 import React from 'react'
-import { IoCalendar, IoChevronDown } from 'react-icons/io5'
+import { IoCalendar, IoCardOutline, IoChevronDown, IoWalletOutline } from 'react-icons/io5'
 
 const future = { start: add(new Date(), { days: 1 }), end: null, label: 'Masa depan' }
 const ranges = {
@@ -207,18 +207,28 @@ const Transactions = () => {
                                 className="flex flex-col px-2 cursor-pointer group hover:bg-gray-400"
                                 onClick={(e) => handleStartEditTransaction(e, transaction)}
                             >
-                                <div className="flex flex-row items-center justify-between p-2 py-3 border-t group-hover:border-t-gray-400">
+                                <div className="flex flex-row items-center justify-between p-2 py-3 border-t group-hover:border-t-gray-400 group-hover:text-white">
                                     <div className="flex flex-row items-center">
                                         <Icon icon={transaction.category.icon} className="w-7 h-7" />
                                         <div className="flex flex-col ml-3">
                                             <div>{transaction.category.name}</div>
-                                            <div className="min-h-[0.75rem] text-sm text-gray-500 group-hover:text-white">{transaction.notes}</div>
+                                            <div className="text-xs text-gray-500 group-hover:text-white">{transaction.notes}</div>
                                         </div>
                                     </div>
 
-                                    <div className={`text-sm ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
-                                        {transaction.category.type === 'expense' ? '-' : ''}
-                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(transaction.amount)}
+                                    <div className="flex flex-col">
+                                        <div className={`text-sm ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
+                                            {transaction.category.type === 'expense' ? '-' : ''}
+                                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(transaction.amount)}
+                                        </div>
+                                        <div className="flex flex-row items-center justify-end text-gray-500 group-hover:text-white">
+                                            {transaction.wallet.type === 'cash' ? (
+                                                <IoWalletOutline className="w-4 h-4 mr-1" />
+                                            ) : (
+                                                <IoCardOutline className="w-4 h-4 mr-1" />
+                                            )}
+                                            <div className="text-xs text-right ">{transaction.wallet.name}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </li>
