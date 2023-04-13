@@ -24,8 +24,8 @@ interface IPostUpdateTransaction {
     date: Date
 }
 
-const postUpdateTransaction = (data: IPostUpdateTransaction): Promise<ITransactionDoc> =>
-    axios.post('/api/transaction/update', {
+const updateTransaction = (data: IPostUpdateTransaction): Promise<ITransactionDoc> =>
+    axios.put('/api/transaction/update', {
         transactionId: data.transactionId,
         amount: data.amount,
         walletId: data.walletId,
@@ -34,10 +34,7 @@ const postUpdateTransaction = (data: IPostUpdateTransaction): Promise<ITransacti
         date: data.date,
     })
 
-const postDeleteTransaction = (transactionId: string): Promise<ITransactionDoc> =>
-    axios.post('/api/transaction/delete', {
-        transactionId,
-    })
+const deleteTransaction = (transactionId: string): Promise<ITransactionDoc> => axios.delete(`/api/transaction/delete?transactionId=${transactionId}`)
 
 const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => {
     const queryClient = useQueryClient()
@@ -57,8 +54,8 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => 
     const categoryInputRef = React.useRef<HTMLInputElement>(null)
     const dateInputRef = React.useRef<HTMLInputElement>(null)
 
-    const transactionsMutation = useMutation({
-        mutationFn: postUpdateTransaction,
+    const transactionUpdatedMutation = useMutation({
+        mutationFn: updateTransaction,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['transactions'] })
             queryClient.invalidateQueries({ queryKey: ['wallets'] })
@@ -70,17 +67,30 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => 
         },
     })
 
+    const transactionDeletedMutation = useMutation({
+        mutationFn: deleteTransaction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['transactions'] })
+            queryClient.invalidateQueries({ queryKey: ['wallets'] })
+            setLoading(false)
+            editTransactionModal.close()
+        },
+        onError: (error) => {
+            setError('Failed to delete wallet.' + (error as Error).message)
+        },
+    })
+
     const dateText = React.useMemo(() => getDateText(date), [date])
 
     const handleDeleteTransaction: React.MouseEventHandler<HTMLButtonElement> = async () => {
-        if (loading) {
+        if (loading || !transaction.current) {
             return
         }
 
         setError('')
         setLoading(true)
-
-        // TODO: Delete transaction
+        
+        transactionDeletedMutation.mutate(transaction.current._id)
     }
 
     const handleSaveTransaction: React.MouseEventHandler<HTMLButtonElement> = async () => {
@@ -91,7 +101,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => 
         setError('')
         setLoading(true)
 
-        transactionsMutation.mutate({
+        transactionUpdatedMutation.mutate({
             transactionId: transaction.current._id,
             amount: parseFloat(amount),
             walletId: wallet?._id,
