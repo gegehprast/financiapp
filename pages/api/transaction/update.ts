@@ -13,20 +13,26 @@ import Category from '@/models/Category'
 
 async function update(req: NextApiRequest, res: NextApiResponse<MessageResponse | ITransactionDoc>) {
     try {
-        const wallet = await Wallet.findOne({ user: req.session.auth.user._id, _id: req.body.walletId })
-        const category = await Category.findOne({ _id: req.body.categoryId })
         const transaction = await Transaction.findOne({ user: req.session.auth.user._id, _id: req.body.transactionId })
 
+        if (!transaction) {
+            return res.status(404).json({ message: 'Transaction not found.' })
+        }
+
+        const oldWallet = await Wallet.findOne({ user: req.session.auth.user._id, _id: transaction.wallet })
+        const wallet = await Wallet.findOne({ user: req.session.auth.user._id, _id: req.body.walletId })
+        const category = await Category.findOne({ _id: req.body.categoryId })
+        
+        if (!oldWallet) {
+            return res.status(404).json({ message: 'Old wallet not found.' })
+        }
+        
         if (!wallet) {
             return res.status(404).json({ message: 'Wallet not found.' })
         }
 
         if (!category) {
             return res.status(404).json({ message: 'Category not found.' })
-        }
-
-        if (!transaction) {
-            return res.status(404).json({ message: 'Transaction not found.' })
         }
 
         const oldType = category.type
@@ -41,9 +47,19 @@ async function update(req: NextApiRequest, res: NextApiResponse<MessageResponse 
 
         await transaction.save()
 
-        // save wallet
-        wallet.balance += (category.type === 'income' ? transaction.amount : -transaction.amount) - (oldType === 'income' ? oldAmount : -oldAmount)
-        await wallet.save()
+        // save wallets
+        if (wallet.id === oldWallet.id) {
+            oldWallet.balance += oldType === 'income' ? -oldAmount : oldAmount
+            oldWallet.balance += category.type === 'income' ? transaction.amount : -transaction.amount
+
+            await oldWallet.save()
+        } else {
+            oldWallet.balance += oldType === 'income' ? -oldAmount : oldAmount
+            wallet.balance += category.type === 'income' ? transaction.amount : -transaction.amount
+
+            await oldWallet.save()
+            await wallet.save()
+        }
 
         return res.json(transaction)
     } catch (error) {
