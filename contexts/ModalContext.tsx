@@ -22,12 +22,14 @@ export const ModalProvider: React.FC<{ children: JSX.Element }> = ({ children })
     const [showAddTransactionModal, setShowAddTransactionModal] = React.useState(false)
     const [showSelectWalletModal, setShowSelectWalletModal] = React.useState(false)
     const [showSelectCategoryModal, setShowSelectCategoryModal] = React.useState(false)
+    const [setEditTransactionModal, setShowEditTransactionModal] = React.useState(false)
 
     React.useEffect(() => {
         setShowAddWalletModal(false)
         setShowAddTransactionModal(false)
         setShowSelectWalletModal(false)
         setShowSelectCategoryModal(false)
+        setShowEditTransactionModal(false)
     }, [router])
 
     return (
@@ -57,6 +59,12 @@ export const ModalProvider: React.FC<{ children: JSX.Element }> = ({ children })
                         setShow: setShowSelectCategoryModal,
                         open: () => setShowSelectCategoryModal(true),
                         close: () => setShowSelectCategoryModal(false),
+                    },
+                    editTransactionModal: {
+                        show: setEditTransactionModal,
+                        setShow: setShowEditTransactionModal,
+                        open: () => setShowEditTransactionModal(true),
+                        close: () => setShowEditTransactionModal(false),
                     },
                 },
             }}
