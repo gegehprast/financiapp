@@ -20,7 +20,7 @@ export default function Home() {
                         wallets.reduce((balance, wallet) => wallet.balance + balance, 0)
                     )}
                 </h1>
-                <small className="text-base">Total balance</small>
+                <small className="text-base">Total saldo</small>
             </section>
 
             {/* wallets */}
@@ -28,7 +28,7 @@ export default function Home() {
                 <div className="flex flex-row items-center justify-between p-3">
                     <h2 className="text-lg font-semibold">My Wallets</h2>
                     <Link href={'/wallets'} className="font-medium text-green-400">
-                        See all
+                        Lihat semua
                     </Link>
                 </div>
 
@@ -69,9 +69,9 @@ export default function Home() {
             {/* recent transactions */}
             <section className="flex flex-col mt-5 bg-white rounded-lg">
                 <div className="flex flex-row items-center justify-between p-3">
-                    <h2 className="text-lg font-semibold">Recent Transactions</h2>
+                    <h2 className="text-lg font-semibold">Transaksi terakhir</h2>
                     <Link href={'/transactions'} className="font-medium text-green-400">
-                        See all
+                        Lihat semua
                     </Link>
                 </div>
 
