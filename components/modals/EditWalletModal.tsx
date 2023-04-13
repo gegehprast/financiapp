@@ -44,6 +44,7 @@ const EditWalletModal: React.FC<EditWalletModalProps> = ({ show }) => {
         mutationFn: updateWallet,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['wallets'] })
+            queryClient.invalidateQueries({ queryKey: ['transactions'] })
             setLoading(false)
             editWalletModal.close()
         },
