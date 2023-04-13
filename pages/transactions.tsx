@@ -1,10 +1,12 @@
 import Icon from '@/components/Icon'
 import Tab from '@/components/Tab'
 import SelectWalletModal from '@/components/modals/SelectWalletModal'
+import { useEditingManager } from '@/contexts/EditingManagerContext'
 import { useModal } from '@/contexts/ModalContext'
 import { getDateText, isLastMonth, isLastWeek } from '@/helpers/date'
 import useTransaction from '@/hooks/useTransaction'
 import useWallet from '@/hooks/useWallet'
+import { IPopulatedTransactionDoc } from '@/models/Transaction'
 import { IWalletDoc } from '@/models/Wallet'
 import {
     add,
@@ -63,8 +65,9 @@ const rangeTypeTabItems = [
 ]
 
 const Transactions = () => {
-    const { selectWalletModal } = useModal()
+    const { selectWalletModal, editTransactionModal } = useModal()
     const { wallets } = useWallet()
+    const { transaction: editingTransaction } = useEditingManager()
     const [wallet, setWallet] = React.useState<IWalletDoc | null>(null)
     const [rangeType, setRangeType] = React.useState<typeof rangeTypeTabItems[number]>(rangeTypeTabItems[0])
     const [currentRange, setCurrentRange] = React.useState<typeof future | typeof ranges[keyof typeof ranges][number]>(
@@ -78,6 +81,12 @@ const Transactions = () => {
         },
     })
     const rangeRef = React.useRef<HTMLDivElement>(null)
+
+    const handleStartEditTransaction = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, transaction: IPopulatedTransactionDoc) => {
+        editingTransaction.setCurrent(transaction)
+
+        editTransactionModal.open()
+    }
 
     React.useEffect(() => {
         setCurrentRange(ranges[rangeType.id as keyof typeof ranges][ranges[rangeType.id as keyof typeof ranges].length - 1])
@@ -183,25 +192,25 @@ const Transactions = () => {
 
                     <ul>
                         {groupedTransaction.transactions.map((transaction) => (
-                            <li key={transaction._id} className="group hover:bg-gray-400">
-                                <Link href={'/wallet'} className="flex flex-col px-2">
-                                    <div className="flex flex-row items-center justify-between p-2 py-3 border-t group-hover:border-t-gray-400">
-                                        <div className="flex flex-row items-center">
-                                            <Icon icon={transaction.category.icon} className="w-7 h-7" />
-                                            <div className="flex flex-col ml-3">
-                                                <div>{transaction.category.name}</div>
-                                                <div className="min-h-[0.75rem] text-sm text-gray-500 group-hover:text-white">
-                                                    {transaction.notes}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className={`text-sm ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
-                                            {transaction.category.type === 'expense' ? '-' : ''}
-                                            {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(transaction.amount)}
+                            <li
+                                key={transaction._id}
+                                className="flex flex-col px-2 cursor-pointer group hover:bg-gray-400"
+                                onClick={(e) => handleStartEditTransaction(e, transaction)}
+                            >
+                                <div className="flex flex-row items-center justify-between p-2 py-3 border-t group-hover:border-t-gray-400">
+                                    <div className="flex flex-row items-center">
+                                        <Icon icon={transaction.category.icon} className="w-7 h-7" />
+                                        <div className="flex flex-col ml-3">
+                                            <div>{transaction.category.name}</div>
+                                            <div className="min-h-[0.75rem] text-sm text-gray-500 group-hover:text-white">{transaction.notes}</div>
                                         </div>
                                     </div>
-                                </Link>
+
+                                    <div className={`text-sm ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
+                                        {transaction.category.type === 'expense' ? '-' : ''}
+                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(transaction.amount)}
+                                    </div>
+                                </div>
                             </li>
                         ))}
                     </ul>

@@ -4,6 +4,7 @@ import useAuth from '@/hooks/useAuth'
 import AddWalletModal from './modals/AddWalletModal'
 import { useModal } from '@/contexts/ModalContext'
 import AddTransactionModal from './modals/AddTransactionModal'
+import EditTransactionModal from './modals/EditTransactionModal'
 
 interface Props {
     children: ReactElement
@@ -12,7 +13,7 @@ interface Props {
 const MainLayout = ({ children }: Props) => {
     const { auth } = useAuth({ redirectTo: '/login' })
     const content = useRef<HTMLDivElement>(null)
-    const { addWalletModal, addTransactionModal } = useModal()
+    const { addWalletModal, addTransactionModal, editTransactionModal } = useModal()
 
     return (
         <div className="relative w-full h-screen mx-auto overflow-hidden bg-gray-200 lg:w-1/2 xl:w-1/4">
@@ -30,6 +31,7 @@ const MainLayout = ({ children }: Props) => {
 
             <AddWalletModal show={addWalletModal.show} />
             <AddTransactionModal show={addTransactionModal.show} />
+            <EditTransactionModal show={editTransactionModal.show} />
         </div>
     )
 }

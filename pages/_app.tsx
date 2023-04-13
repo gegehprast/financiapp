@@ -7,6 +7,7 @@ import Head from 'next/head'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ModalProvider } from '@/contexts/ModalContext'
+import { EditingManagerProvider } from '@/contexts/EditingManagerContext'
 
 export type MyNextPage<P = {}, IP = P> = NextPage<P, IP> & {
     layout?: (page: ReactElement<P>) => ReactElement
@@ -38,7 +39,9 @@ export default function App({ Component, pageProps }: ComponentProps) {
             </Head>
 
             <QueryClientProvider client={queryClient}>
-                <ModalProvider>{getLayout(<Component {...pageProps} />)}</ModalProvider>
+                <ModalProvider>
+                    <EditingManagerProvider>{getLayout(<Component {...pageProps} />)}</EditingManagerProvider>
+                </ModalProvider>
 
                 <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
             </QueryClientProvider>
