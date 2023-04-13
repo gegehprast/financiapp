@@ -64,6 +64,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => 
         },
         onError: (error) => {
             setError('Failed to update wallet.' + (error as Error).message)
+            setLoading(false)
         },
     })
 
@@ -77,6 +78,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({ show }) => 
         },
         onError: (error) => {
             setError('Failed to delete wallet.' + (error as Error).message)
+            setLoading(false)
         },
     })
 

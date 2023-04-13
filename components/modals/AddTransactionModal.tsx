@@ -57,6 +57,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
         },
         onError: (error) => {
             setError('Failed to add wallet.' + (error as Error).message)
+            setLoading(false)
         },
     })
 

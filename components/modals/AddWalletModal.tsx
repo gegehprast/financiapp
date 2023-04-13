@@ -35,6 +35,7 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
         },
         onError: (error) => {
             setError('Failed to add wallet.' + (error as Error).message)
+            setLoading(false)
         },
     })
 
@@ -82,7 +83,7 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
 
                 <section className="p-4">
                     <div className="w-full mt-2">
-                        <label className="text-sm text-gray-600">Name</label>
+                        <label className="text-sm text-gray-600">Nama</label>
                         <input
                             ref={nameInputRef}
                             type="text"
@@ -125,7 +126,7 @@ const AddWalletModal: React.FC<AddWalletModalProps> = ({ show }) => {
                         </div>
                     </div>
                     <div className="w-full mt-2">
-                        <label className="text-sm text-gray-600">Kurensi</label>
+                        <label className="text-sm text-gray-600">Mata uang</label>
                         <input
                             type="text"
                             value={'Rupiah'}
