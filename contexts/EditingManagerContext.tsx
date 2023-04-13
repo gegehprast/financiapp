@@ -1,6 +1,5 @@
-import { IPopulatedTransactionDoc, ITransactionDoc } from '@/models/Transaction'
+import { IPopulatedTransactionDoc } from '@/models/Transaction'
 import { IWalletDoc } from '@/models/Wallet'
-import { useRouter } from 'next/router'
 import React from 'react'
 
 interface EditingManagerContextProps {

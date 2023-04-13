@@ -1,6 +1,8 @@
 import EllipsisVertical from '@/components/icons/EllipsisVertical'
+import { useEditingManager } from '@/contexts/EditingManagerContext'
 import { useModal } from '@/contexts/ModalContext'
 import useWallet from '@/hooks/useWallet'
+import { IWalletDoc } from '@/models/Wallet'
 import Link from 'next/link'
 import Router from 'next/router'
 import React from 'react'
@@ -8,7 +10,14 @@ import { IoAddCircle, IoArrowBackOutline, IoCardOutline, IoWalletOutline } from 
 
 const Wallets = () => {
     const { wallets, isSuccess } = useWallet()
-    const { addWalletModal } = useModal()
+    const { addWalletModal, editWalletModal } = useModal()
+    const { wallet: editingWallet } = useEditingManager()
+
+    const handleStartEditWallet = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, wallet: IWalletDoc) => {
+        editingWallet.setCurrent(wallet)
+
+        editWalletModal.open()
+    }
 
     return (
         <main className="relative">
@@ -24,27 +33,29 @@ const Wallets = () => {
 
             <ul className="mt-5 bg-white">
                 {wallets.map((wallet) => (
-                    <li className="group hover:bg-gray-400" key={wallet._id}>
-                        <Link href={'/wallet'} className="flex flex-row items-center justify-between p-4">
-                            <div className="flex flex-row items-center">
-                                {wallet.type === 'cash' ? (
-                                    <IoWalletOutline className="w-8 h-8 group-hover:text-white" />
-                                ) : (
-                                    <IoCardOutline className="w-8 h-8 group-hover:text-white" />
-                                )}
+                    <li
+                        key={wallet._id}
+                        className="flex flex-row items-center justify-between p-4 cursor-pointer group hover:bg-gray-400"
+                        onClick={(e) => handleStartEditWallet(e, wallet)}
+                    >
+                        <div className="flex flex-row items-center">
+                            {wallet.type === 'cash' ? (
+                                <IoWalletOutline className="w-8 h-8 group-hover:text-white" />
+                            ) : (
+                                <IoCardOutline className="w-8 h-8 group-hover:text-white" />
+                            )}
 
-                                <div className="flex flex-col justify-center ml-4">
-                                    <div className="font-medium group-hover:text-white">{wallet.name}</div>
-                                    <div className="text-gray-500 group-hover:text-white">
-                                        {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(wallet.balance)}
-                                    </div>
+                            <div className="flex flex-col justify-center ml-4">
+                                <div className="font-medium group-hover:text-white">{wallet.name}</div>
+                                <div className="text-gray-500 group-hover:text-white">
+                                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(wallet.balance)}
                                 </div>
                             </div>
+                        </div>
 
-                            <div className="w-6 h-6">
-                                <EllipsisVertical />
-                            </div>
-                        </Link>
+                        <div className="w-6 h-6">
+                            <EllipsisVertical />
+                        </div>
                     </li>
                 ))}
             </ul>
