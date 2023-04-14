@@ -1,14 +1,17 @@
 import { useModal } from '@/contexts/ModalContext'
 import { ICategoryDoc } from '@/models/Category'
 import React from 'react'
-import { IoArrowBackOutline } from 'react-icons/io5'
+import { IoArrowBackOutline, IoGlobeOutline } from 'react-icons/io5'
 import Icon from '../Icon'
 import useCategory from '@/hooks/useCategory'
 import Tab from '../Tab'
 
+export type SimpleICategoryDoc = Pick<ICategoryDoc, '_id' | 'name' | 'type' | 'icon'>
+
 interface SelectCategoryModalProps {
     show: boolean
-    select: (wallet: ICategoryDoc) => void
+    select: (category: ICategoryDoc | SimpleICategoryDoc) => void
+    withAll?: boolean
 }
 
 const typeTabItems = [
@@ -16,7 +19,21 @@ const typeTabItems = [
     { name: 'Pemasukan', id: 'income' },
 ]
 
-const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select }) => {
+const allIncome: SimpleICategoryDoc = {
+    _id: 'allIncome',
+    name: 'Semua Pemasukan',
+    type: 'income',
+    icon: 'IoGlobeOutline',
+}
+
+const allExpense: SimpleICategoryDoc = {
+    _id: 'allExpense',
+    name: 'Semua Pengeluaran',
+    type: 'expense',
+    icon: 'IoGlobeOutline',
+}
+
+const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select, withAll }) => {
     const { selectCategoryModal } = useModal()
     const { categories, isLoading } = useCategory()
     const [type, setType] = React.useState<typeof typeTabItems[number]>(typeTabItems[0])
@@ -45,6 +62,19 @@ const SelectCategoryModal: React.FC<SelectCategoryModalProps> = ({ show, select 
                         <div>Memuat...</div>
                     ) : (
                         <ul className="flex flex-col h-[calc(100vh-4rem-3rem-3rem-1.25rem)] overflow-auto">
+                            {withAll && (<li className="border-t group hover:bg-gray-400">
+                                <button
+                                    onClick={() => {
+                                        select(type.id === 'income' ? allIncome : allExpense)
+                                        selectCategoryModal.close()
+                                    }}
+                                    className="flex flex-row items-center w-full p-2 font-medium group-hover:text-white"
+                                >
+                                    <Icon icon={type.id === 'income' ? allIncome.icon : allExpense.icon} className="w-5 h-5" />
+                                    <div className="ml-2">{type.id === 'income' ? allIncome.name : allExpense.name}</div>
+                                </button>
+                            </li>)}
+
                             {categories
                                 .filter((category) => category.type === type.id)
                                 .map((category) => (

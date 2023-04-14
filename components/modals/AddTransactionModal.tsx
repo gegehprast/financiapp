@@ -4,7 +4,7 @@ import { IoAppsOutline, IoCalendarOutline, IoCashOutline, IoCloseOutline, IoDocu
 import SelectWalletModal from './SelectWalletModal'
 import { IWalletDoc } from '@/models/Wallet'
 import { ICategoryDoc } from '@/models/Category'
-import SelectCategoryModal from './SelectCategoryModal'
+import SelectCategoryModal, { SimpleICategoryDoc } from './SelectCategoryModal'
 import axios from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDateText } from '@/helpers/date'
@@ -41,7 +41,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
     const [isEditingAmount, setIsEditingAmount] = React.useState(false)
     const [isEditingDate, setIsEditingDate] = React.useState(false)
     const [wallet, setWallet] = React.useState<IWalletDoc>()
-    const [category, setCategory] = React.useState<ICategoryDoc>()
+    const [category, setCategory] = React.useState<ICategoryDoc | SimpleICategoryDoc>()
     const [notes, setNotes] = React.useState('')
     const [date, setDate] = React.useState(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
     const [error, setError] = React.useState<string>('')
@@ -281,7 +281,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                     />
                     <SelectCategoryModal
                         show={selectCategoryModal.show}
-                        select={(category: ICategoryDoc) => {
+                        select={(category) => {
                             setCategory(category)
                         }}
                     />
