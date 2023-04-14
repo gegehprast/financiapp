@@ -18,7 +18,7 @@ export const RecurringPatternSchema: Schema = new Schema(
         transaction: {
             type: mongoose.Types.ObjectId,
             required: true,
-            ref: 'RecurringPattern',
+            ref: 'Transaction',
         },
         separationCount: {
             type: Number,
