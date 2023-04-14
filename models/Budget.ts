@@ -4,7 +4,7 @@ export interface IBudgetDoc extends Document {
     user: mongoose.Types.ObjectId
     category: mongoose.Types.ObjectId
     wallet: mongoose.Types.ObjectId
-    name: string
+    reference?: mongoose.Types.ObjectId
     value: number
     isRepeating: boolean
     repeatType?: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'semestrial' | 'annually'
@@ -31,9 +31,10 @@ export const BudgetSchema: Schema = new Schema(
             required: true,
             ref: 'Wallet',
         },
-        name: {
-            type: String,
-            required: true,
+        reference: {
+            type: mongoose.Types.ObjectId,
+            required: false,
+            ref: 'Budget',
         },
         value: {
             type: Number,
