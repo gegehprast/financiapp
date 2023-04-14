@@ -31,9 +31,11 @@ import {
     IoCashOutline,
     IoGiftOutline,
     IoReturnDownBackOutline,
+    IoGlobeOutline,
 } from 'react-icons/io5'
 
 const IconMap = {
+    IoGlobeOutline: IoGlobeOutline,
     IoCarSportOutline: IoCarSportOutline,
     IoFastFoodOutline: IoFastFoodOutline,
     IoBagOutline: IoBagOutline,
