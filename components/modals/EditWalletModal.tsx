@@ -27,8 +27,6 @@ const updateWallet = (data: IPostUpdateWallet): Promise<IWalletDoc> =>
         balance: data.balance,
     })
 
-const deleteWallet = (walletId: string): Promise<IWalletDoc> => axios.delete(`/api/wallet/delete?walletId=${walletId}`)
-
 const EditWalletModal: React.FC<EditWalletModalProps> = ({ show }) => {
     const queryClient = useQueryClient()
     const { editWalletModal } = useModal()
