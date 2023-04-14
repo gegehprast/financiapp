@@ -1,4 +1,5 @@
 import ChevronRight from '@/components/icons/ChevronRight'
+import useAuth from '@/hooks/useAuth'
 import axios from 'axios'
 import Link from 'next/link'
 import Router from 'next/router'
@@ -6,6 +7,8 @@ import React from 'react'
 import { IoAppsOutline, IoLogOutOutline, IoSettingsOutline, IoWalletOutline } from 'react-icons/io5'
 
 const Account = () => {
+    const { auth } = useAuth()
+
     const handleLogout = () => {
         axios.post('/api/logout').then(() => {
             Router.push('/login')
@@ -14,6 +17,10 @@ const Account = () => {
 
     return (
         <main>
+            <header className="flex flex-row items-center p-4 bg-white h-[3rem]">
+                <h1 className="text-lg font-semibold">Halo, {auth.user.name}!</h1>
+            </header>
+
             <ul className="mt-5 bg-white">
                 <li className="group hover:bg-gray-500">
                     <Link href={'/wallets'} className="flex flex-row items-center justify-between p-4">
