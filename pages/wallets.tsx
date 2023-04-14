@@ -2,20 +2,56 @@ import { useEditingManager } from '@/contexts/EditingManagerContext'
 import { useModal } from '@/contexts/ModalContext'
 import useWallet from '@/hooks/useWallet'
 import { IWalletDoc } from '@/models/Wallet'
+import { useQueryClient } from '@tanstack/react-query'
+import axios from 'axios'
 import Router from 'next/router'
 import React from 'react'
-import { IoAddCircle, IoArrowBackOutline, IoCardOutline, IoEllipsisVerticalOutline, IoWalletOutline } from 'react-icons/io5'
+import {
+    IoAddCircle,
+    IoArrowBackOutline,
+    IoCardOutline,
+    IoCreateOutline,
+    IoEllipsisVerticalOutline,
+    IoSwapHorizontalOutline,
+    IoTrashOutline,
+    IoWalletOutline,
+} from 'react-icons/io5'
 
 const Wallets = () => {
     const { wallets, isSuccess } = useWallet()
     const { addWalletModal, editWalletModal } = useModal()
     const { wallet: editingWallet } = useEditingManager()
+    const [openContext, setOpenContext] = React.useState<string>()
+
+    const handleOpenContext = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, wallet: IWalletDoc) => {
+        e.stopPropagation()
+
+        setOpenContext(openContext === wallet._id ? undefined : wallet._id)
+    }
 
     const handleStartEditWallet = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, wallet: IWalletDoc) => {
         editingWallet.setCurrent(wallet)
 
         editWalletModal.open()
     }
+
+    const handleDeleteWallet = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, wallet: IWalletDoc) => {
+        e.stopPropagation()
+
+        alert('Coming soon.')
+    }
+
+    React.useEffect(() => {
+        const handleClick = () => {
+            setOpenContext(undefined)
+        }
+
+        document.addEventListener('click', handleClick)
+
+        return () => {
+            document.removeEventListener('click', handleClick)
+        }
+    }, [])
 
     return (
         <main className="relative">
@@ -52,10 +88,45 @@ const Wallets = () => {
                         </div>
 
                         <div
-                            className="flex flex-row items-center p-2 rounded-full hover:bg-gray-500 group-hover:text-white"
-                            onClick={(e) => e.stopPropagation()}
+                            className="relative flex flex-row items-center p-2 rounded-full hover:bg-gray-500 group-hover:text-white"
+                            onClick={(e) => handleOpenContext(e, wallet)}
                         >
                             <IoEllipsisVerticalOutline className="w-6 h-6" />
+
+                            <div
+                                className={`absolute top-0 right-0 w-48 mt-2 bg-white text-black rounded-md shadow-lg z-10 ${
+                                    openContext === wallet._id ? '' : 'hidden'
+                                }`}
+                            >
+                                <ul className="flex flex-col">
+                                    <li
+                                        className="flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-gray-400"
+                                        onClick={(e) => handleStartEditWallet(e, wallet)}
+                                    >
+                                        <div className="flex flex-row items-center">
+                                            <IoCreateOutline className="w-6 h-6" />
+                                            <div className="ml-2">Edit</div>
+                                        </div>
+                                    </li>
+
+                                    <li className="flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-gray-400">
+                                        <div className="flex flex-row items-center">
+                                            <IoSwapHorizontalOutline className="w-6 h-6" />
+                                            <div className="ml-2">Transfer</div>
+                                        </div>
+                                    </li>
+
+                                    <li
+                                        className="flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-gray-400"
+                                        onClick={(e) => handleDeleteWallet(e, wallet)}
+                                    >
+                                        <div className="flex flex-row items-center">
+                                            <IoTrashOutline className="w-6 h-6" />
+                                            <div className="ml-2">Delete</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </li>
                 ))}
