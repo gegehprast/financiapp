@@ -1,8 +1,10 @@
+import { useModal } from '@/contexts/ModalContext'
 import Router from 'next/router'
 import React from 'react'
 import { IoAddCircle, IoArrowBackOutline, IoCarOutline, IoFastFoodOutline, IoWalletOutline } from 'react-icons/io5'
 
 const Budgets = () => {
+    const { addBudgetModal } = useModal()
     const [status, setStatus] = React.useState<'running' | 'finished'>('running')
 
     return (
@@ -34,7 +36,11 @@ const Budgets = () => {
                 </button>
 
                 <div className="relative w-24">
-                    <button type="button" className="absolute left-1/2 drop-shadow-lg top-[calc(50%-0.1rem)] -translate-y-1/2 -translate-x-1/2">
+                    <button
+                        type="button"
+                        className="absolute left-1/2 drop-shadow-lg top-[calc(50%-0.1rem)] -translate-y-1/2 -translate-x-1/2"
+                        onClick={addBudgetModal.open}
+                    >
                         <IoAddCircle className="w-12 h-12 text-green-500 hover:text-green-600" />
                     </button>
                 </div>
