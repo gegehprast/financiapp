@@ -2,8 +2,6 @@ import { useEditingManager } from '@/contexts/EditingManagerContext'
 import { useModal } from '@/contexts/ModalContext'
 import useWallet from '@/hooks/useWallet'
 import { IWalletDoc } from '@/models/Wallet'
-import { useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
 import Router from 'next/router'
 import React from 'react'
 import {
@@ -36,6 +34,12 @@ const Wallets = () => {
     }
 
     const handleDeleteWallet = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, wallet: IWalletDoc) => {
+        e.stopPropagation()
+
+        alert('Coming soon.')
+    }
+
+    const handleTransferWallet = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, wallet: IWalletDoc) => {
         e.stopPropagation()
 
         alert('Coming soon.')
@@ -109,7 +113,8 @@ const Wallets = () => {
                                         </div>
                                     </li>
 
-                                    <li className="flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-gray-400">
+                                    <li className="flex flex-row items-center justify-between p-2 cursor-pointer hover:bg-gray-400"
+                                        onClick={(e) => handleTransferWallet(e, wallet)}>
                                         <div className="flex flex-row items-center">
                                             <IoSwapHorizontalOutline className="w-6 h-6" />
                                             <div className="ml-2">Transfer</div>
