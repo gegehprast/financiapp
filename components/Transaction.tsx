@@ -35,7 +35,7 @@ const Transaction: React.FC<ITransactionProps> = ({ transaction }) => {
                 </div>
 
                 <div className="flex flex-col">
-                    <div className={`text-sm ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
+                    <div className={`text-sm text-right ${transaction.category.type === 'expense' ? 'text-red-500' : 'text-blue-500'}`}>
                         {transaction.category.type === 'expense' ? '-' : ''}
                         {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(transaction.amount)}
                     </div>
@@ -45,7 +45,7 @@ const Transaction: React.FC<ITransactionProps> = ({ transaction }) => {
                         ) : (
                             <IoCardOutline className="w-4 h-4 mr-1" />
                         )}
-                        <div className="text-xs text-right ">{transaction.wallet.name}</div>
+                        <div className="text-xs text-right">{transaction.wallet.name}</div>
                     </div>
                 </div>
             </div>
