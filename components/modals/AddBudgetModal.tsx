@@ -1,37 +1,17 @@
 import { useModal } from '@/contexts/ModalContext'
 import React from 'react'
-import { IoAppsOutline, IoCalendarOutline, IoCashOutline, IoCloseOutline, IoDocumentTextOutline, IoWalletOutline } from 'react-icons/io5'
+import { IoAppsOutline, IoCalendarOutline, IoCashOutline, IoCloseOutline, IoTimerOutline, IoWalletOutline } from 'react-icons/io5'
 import SelectWalletModal from './SelectWalletModal'
 import { IWalletDoc } from '@/models/Wallet'
 import { ICategoryDoc } from '@/models/Category'
 import SelectCategoryModal, { SimpleICategoryDoc } from './SelectCategoryModal'
-import axios from 'axios'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { getDateText } from '@/helpers/date'
 
-interface AddTransactionModalProps {
+interface AddBudgetModalProps {
     show: boolean
 }
 
-interface IPostAddTransaction {
-    amount: number
-    walletId: string
-    categoryId: string
-    notes: string
-    date: Date
-}
-
-const postAddTransaction = (data: IPostAddTransaction): Promise<IWalletDoc> =>
-    axios.post('/api/transaction/store', {
-        amount: data.amount,
-        walletId: data.walletId,
-        categoryId: data.categoryId,
-        notes: data.notes,
-        date: data.date,
-    })
-
-const AddBudgetModal: React.FC<AddTransactionModalProps> = ({ show }) => {
-    const queryClient = useQueryClient()
+const AddBudgetModal: React.FC<AddBudgetModalProps> = ({ show }) => {
     const { addBudgetModal, selectWalletModal, selectCategoryModal } = useModal()
     const amountInputRef = React.useRef<HTMLInputElement>(null)
     const walletInputRef = React.useRef<HTMLInputElement>(null)
@@ -42,42 +22,22 @@ const AddBudgetModal: React.FC<AddTransactionModalProps> = ({ show }) => {
     const [isEditingDate, setIsEditingDate] = React.useState(false)
     const [wallet, setWallet] = React.useState<IWalletDoc>()
     const [category, setCategory] = React.useState<ICategoryDoc | SimpleICategoryDoc>()
-    const [notes, setNotes] = React.useState('')
     const [date, setDate] = React.useState(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
+    const [isRecurring, setIsRecurring] = React.useState(false)
     const [error, setError] = React.useState<string>('')
     const [loading, setLoading] = React.useState<boolean>(false)
 
-    const transactionsMutation = useMutation({
-        mutationFn: postAddTransaction,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['transactions'] })
-            queryClient.invalidateQueries({ queryKey: ['wallets'] })
-            setLoading(false)
-            addBudgetModal.close()
-        },
-        onError: (error) => {
-            setError('Failed to add wallet.' + (error as Error).message)
-            setLoading(false)
-        },
-    })
-
     const dateText = React.useMemo(() => getDateText(date), [date])
 
-    const handleSaveTransaction: React.MouseEventHandler<HTMLButtonElement> = async () => {
+    const handleSaveBudget: React.MouseEventHandler<HTMLButtonElement> = async () => {
         if (loading) {
             return
         }
 
         setError('')
         setLoading(true)
-
-        transactionsMutation.mutate({
-            amount: parseFloat(amount),
-            walletId: wallet?._id,
-            categoryId: category?._id,
-            notes,
-            date,
-        })
+        
+        // TODO: save budget
     }
 
     React.useEffect(() => {
@@ -91,7 +51,6 @@ const AddBudgetModal: React.FC<AddTransactionModalProps> = ({ show }) => {
         setWallet(undefined)
         setCategory(undefined)
         setDate(new Date(Date.now() - new Date().getTimezoneOffset() * 60000))
-        setNotes('')
     }, [show])
 
     React.useEffect(() => {
@@ -131,7 +90,7 @@ const AddBudgetModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                         <h1 className="ml-6 text-lg font-semibold">Buat Budget</h1>
                     </div>
 
-                    <button type="button" className="font-medium text-green-400" onClick={handleSaveTransaction}>
+                    <button type="button" className="font-medium text-green-400" onClick={handleSaveBudget}>
                         Simpan
                     </button>
                 </header>
@@ -255,14 +214,19 @@ const AddBudgetModal: React.FC<AddTransactionModalProps> = ({ show }) => {
                     </div>
 
                     <div className="flex flex-row items-center w-full mt-4">
-                        <IoDocumentTextOutline className="w-8 h-8" />
-                        <textarea
-                            value={notes}
-                            placeholder="Tulis catatan"
-                            rows={3}
-                            onChange={(e) => setNotes(e.target.value)}
-                            className="w-full p-2 ml-2 text-black border-b border-green-400 outline-none focus:border-b-2"
-                        />
+                        <div className="w-8 h-8"></div>
+
+                        <label htmlFor="isRecurring" className="flex flex-row items-center text-black">
+                            <input
+                                type="checkbox"
+                                checked={isRecurring}
+                                onChange={(e) => setIsRecurring(e.target.checked)}
+                                className="w-4 h-4 ml-2 accent-blue-500"
+                            />
+                            <div className="ml-2" onClick={() => setIsRecurring(!isRecurring)}>
+                                Mengulang
+                            </div>
+                        </label>
                     </div>
                 </section>
                 {error && <div className="w-full mb-2 text-red-500">{error}</div>}
